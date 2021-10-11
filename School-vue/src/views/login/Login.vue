@@ -26,8 +26,8 @@
             </div>
             <div class="login-box-from">
                 <el-form :model="loginForm" :rules="rules" ref="loginForm" class="demo-ruleForm">
-                    <el-form-item prop="username">
-                        <el-input v-model="loginForm.username" placeholder="请输入用户名" size="medium">
+                    <el-form-item prop="userid">
+                        <el-input v-model="loginForm.userid" placeholder="请输入用户名" size="medium">
                             <el-button slot="prepend" icon="el-icon-user"></el-button>
                         </el-input>
                     </el-form-item>
@@ -64,11 +64,11 @@
             return {
                 loading: false, //登陆状态
                 loginForm: {  // 登陆表单
-                    username: 'admin',
-                    password: '123456'
+                    userid: '18130231',
+                    password: '111111'
                 },
                 rules: {  //登陆验证规则
-                    username: [
+                    userid: [
                         {required: true, message: '请输入用户名', trigger: 'blur'},
                         {min: 2, max: 18, message: '长度在 2 到 18 个字符', trigger: 'blur'},
                         {validator: letterRule, trigger: 'blur'}
@@ -96,46 +96,49 @@
             login() {
 
                 let data = {
-                    username: this.loginForm.username,
+                    userid: this.loginForm.userid,
                     password: this.loginForm.password,
                 }
                 this.$axios
-                    .post("/consumer/login?username="+data.username+"&password="+data.password)
+                    .post("/consumer/validateUser?userid=" + data.userid + "&password=" + data.password)
                     .then(response => {
-                        console.log(response.data)
-                            this.loading = true
-                            // 登陆成功后重定向
-                            this.$router.push({
-                                path: this.$route.query.redirect || '/index'
-                            })
+                        if(response.data=="登陆成功"){
+                            this.$message.success('登陆成功');
+                            //如果用户存在并正确则赋予admin令牌，后期考虑jerry身份为管理员或者普通用户，在store/moudles/user.js
+                            this.$store
+                                .dispatch('user/login', {username: "admin"})//admin为令牌
+                                .then(() => {
+                                    this.loading = true
+                                    // 登陆成功后重定向
+                                    this.$router.push({
+                                        path: this.$route.query.redirect || '/index',
+                                        query:{userid: data.userid}
+                                    })
 
-                        }).catch(err => {
-                            this.loading = true
-                            // console.log(err)
-                        })
+                                })
+                                .catch(err => {
+                                    this.loading = true
+                                    // console.log(err)
+                                })
+                        }else if(response.data=="密码错误！"){
 
-                // this.$axios({
-                //
-                //     method: "get",
-                //     url: "/consumer/login?username="+data.username+"&password="+data.password,
-                //     contentType: "application/json;chart=utf-8",
-                //     dataType: "jsonp",
-                //     data: data,
-                // }).then(response => {
-                //     console.log(response.data)
-                //     this.loading = true
-                //     // 登陆成功后重定向
-                //     this.$router.push({
-                //         path: this.$route.query.redirect || '/index'
-                //     })
-                //
-                // }).catch(err => {
-                //     this.loading = true
-                //     // console.log(err)
-                // })
+                            this.$message.warning('密码错误');
+                            this.loading = false
+
+                        }else if(response.data=="此账户不存在！"){
+
+                            this.$message.error('用户不存在');
+                            this.loading = false
+                        }else{
+                            this.$message.error('服务器出现异常！请稍后登录');
+                        }
+
+                    })
+
 
             }
         }
+
     }
 </script>
 

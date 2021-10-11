@@ -35,7 +35,7 @@
                 <div class="block"><el-avatar shape="square" size="large" :src="squareUrl"></el-avatar></div>
                 <el-dropdown size="medium" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        admin<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="github">项目仓库</el-dropdown-item>
@@ -81,6 +81,23 @@ import screen from '../../assets/icon/screen.svg'  //全屏
 import reduction from '../../assets/icon/reduction.svg' //还原
 
 export default {
+    data: {
+        userId: "",
+        username: "",
+    },
+
+    created() {
+        let userId = this.$route.query.userid
+
+        this.$axios
+            .post("/consumer/getUser?userid=" + userId)
+            .then(response => {
+                console.log(response.data)
+                this.username=response.data.name
+            })
+
+    },
+
     props:{
         asideShow: {
             type: Boolean,
@@ -97,6 +114,7 @@ export default {
     },
     data(){
         return {
+            username: this.username,
             squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
             isFullscreen: false,
             dropShow: false , // 是否现实通知栏
@@ -168,7 +186,7 @@ export default {
         },
         // 退出登陆
         quits(){
-          
+
             this.$store.dispatch('user/resetToken')
         },
         // 展开通知

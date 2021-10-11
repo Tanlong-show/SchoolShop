@@ -28,15 +28,26 @@ class UserController {
     private FeginClient feginClient;
 
 
-    @RequestMapping("/login")
+    //验证登录信息
+    @RequestMapping("/validateUser")
     @ResponseBody
-    public String getUser(@RequestParam("username") String username, @RequestParam("password") String password) {
+    public String getUser(@RequestParam("userid") String userid, @RequestParam("password") String password) {
         //调用远程服务
 //		ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://sbc-order/getOrder", String.class);
 //        logger.info("res="+JSON.toJSONString(responseEntity));
-        System.out.println("TL:  "+username);
-        String result = feginClient.getUser(username,password);
+        String result = feginClient.validateUser(userid,password);
         return result;
     }
+
+    //获取用户数据
+    @RequestMapping("/getUser")
+    @ResponseBody
+    public String getUser(@RequestParam("userid") String userid) {
+        //调用远程服务
+        String result = feginClient.getUser(userid);
+        System.out.println(result);
+        return result;
+    }
+
 }
 

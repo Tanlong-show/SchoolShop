@@ -8,9 +8,14 @@ import org.springframework.stereotype.Component;
 public class ConsumerFallback implements FeginClient {
 
 
+
     @Override
-    public String getUser(String username, String password)  {
+    public String validateUser(String username, String password) {
         return "Feign客户端访问失败!";
     }
 
+    @Override
+    public String getUser(String username) {
+        return "Feign客户端访问失败!";
+    }
 }

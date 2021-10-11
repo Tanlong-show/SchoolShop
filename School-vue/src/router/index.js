@@ -36,7 +36,8 @@ export const constRouter = [
           meta: {
             title: "工作台",
             icon: 'el-icon-s-home',
-            roles: ['admin','jerry']
+            //哪些用户能看的数组
+            // roles: ['admin','jerry']
           }
         }
       ]
@@ -63,6 +64,7 @@ export const asyncRoutes = [
           title: "主控数据",
           icon: 'el-icon-tickets',
           hidden: false,
+          //哪些用户能看的数组
           roles: ['admin','jerry']
         }
       },
