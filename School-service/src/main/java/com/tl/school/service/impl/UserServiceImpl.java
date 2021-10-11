@@ -27,7 +27,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<User> findByUserId(String userId) {
         HashMap hashMap = new HashMap();
-        hashMap.put("userId",userId);
+        hashMap.put("user_id",userId);
         return userMapper.selectByMap(hashMap);
     }
 }

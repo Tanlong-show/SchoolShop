@@ -9,7 +9,8 @@ public class ConsumerFallback implements FeginClient {
 
 
     @Override
-    public String getUser(String name) {
+    public String getUser(String username, String password)  {
         return "Feign客户端访问失败!";
     }
+
 }

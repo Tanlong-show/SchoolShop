@@ -1,6 +1,8 @@
 package com.tl.school.controller;
 
 
+import com.tl.school.entity.User;
+import com.tl.school.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 /**
  * <p>
  * 前端控制器
@@ -20,17 +24,24 @@ import org.springframework.web.client.RestTemplate;
  * @since 2021-10-08
  */
 @RestController
-@RequestMapping("/school/user")
+@RequestMapping("/user")
 class UserController {
     @Autowired
-    private LoadBalancerClient loadBalancerClient;//@LoadBalanced，表示需要做负载匀衡。
+    private UserService userService;
 
-
-    @RequestMapping("/provide")
-    @ResponseBody
-    public String helloWorld(@RequestParam("name") String name) {
-        System.out.println("传入的值为："+name);
-        return "1111";
+    @RequestMapping("/getUser")
+    public String getuser(@RequestParam("username") String username, @RequestParam("password") String password) {
+        System.out.println("传入的值为："+username);//这里username时userid，登陆账号
+        List<User> userList = userService.findByUserId(username);
+        if(userList.size() != 0){
+            if(userList.get(0).getPassword().equals(password)){
+                return "登陆成功";
+            }else{
+                return "密码错误！";
+            }
+        }else{
+            return "此账户不存在！";
+        }
         //第一种调用方式
         // String forObject = new RestTemplate().getForObject("http://localhost:8071/Hello/World?s=" + s, String.class);
         // 第二种调用方式

@@ -33,6 +33,17 @@ echarts.registerMap('china', china)
 // 炫酷图标
 import dataV from '@jiaminghi/data-view'
 
+//import axiox
+import axios from 'axios'
+
+Vue.prototype.$axios = axios
+
+axios.defaults.baseURL = 'http://localhost:8181';//后端开发环境地址
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';//配置请求头信息。
+//axios.defaults.headers.common['accessToken'] = 'FA4C308D5E8F6409E01344ADDAEB4C71';
+
+
+
 Vue.use(dataV)
 
 

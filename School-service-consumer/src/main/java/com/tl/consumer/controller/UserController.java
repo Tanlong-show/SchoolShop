@@ -28,15 +28,15 @@ class UserController {
     private FeginClient feginClient;
 
 
-    @RequestMapping("/getUser")
+    @RequestMapping("/login")
     @ResponseBody
-    public String getUser(@RequestParam("name")String name) {
+    public String getUser(@RequestParam("username") String username, @RequestParam("password") String password) {
         //调用远程服务
 //		ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://sbc-order/getOrder", String.class);
 //        logger.info("res="+JSON.toJSONString(responseEntity));
-        feginClient.getUser(name);
-        return name;
-
+        System.out.println("TL:  "+username);
+        String result = feginClient.getUser(username,password);
+        return result;
     }
 }
 

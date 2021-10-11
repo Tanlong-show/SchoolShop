@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface FeginClient {
 
     @LoadBalanced //负载均衡
-    @RequestMapping(value = "/school/user/provide")
-    String getUser(@RequestParam("name")String name);
+    @RequestMapping(value = "/user/getUser")
+    String getUser(@RequestParam("username") String username, @RequestParam("password") String password);
 
 }
