@@ -31,10 +31,10 @@ public class Code {
         //设置数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDbType(DbType.MYSQL);
-        dsc.setUrl("jdbc:p6spy:mysql:///SchoolShop?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
+        dsc.setUrl("jdbc:mysql:///SchoolShop?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
         dsc.setUsername("root");
         dsc.setPassword("123456");
-        dsc.setDriverName("com.p6spy.engine.spy.P6SpyDriver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         mpg.setDataSource(dsc);
 
         //3、包的配置

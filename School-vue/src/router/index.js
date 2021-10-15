@@ -10,37 +10,37 @@ Vue.use(VueRouter)
 // 通用页面, 这里的配置不需要权限
 export const constRouter = [
   {
-      path: '/login',
-      component: () => import('@/views/login/Login'),
-      hidden: true //导航菜单忽略选项
+    path: '/login',
+    component: () => import('@/views/login/Login'),
+    hidden: true //导航菜单忽略选项
   },
   {
-      path: '',
-      component: Layout, //应用布局页
-      redirect: '/index',
-      hidden: true,
+    path: '',
+    component: Layout, //应用布局页
+    redirect: '/index',
+    hidden: true,
   },
   {
-      path: '/index',
-      component: Layout, //应用布局页
-      name: 'index',
-      meta:{
-          title: "首页", //导航菜单项标题
-          icon: 'el-icon-s-home' //导航菜单图标
-      },
-      children: [
-        {
-          path: '',
-          component: () => import('@/views/index/index.vue'),
-          name: 'indexs',
-          meta: {
-            title: "工作台",
-            icon: 'el-icon-s-home',
-            //哪些用户能看的数组
-            // roles: ['admin','jerry']
-          }
+    path: '/index',
+    component: Layout, //应用布局页
+    name: 'index',
+    meta:{
+      title: "首页", //导航菜单项标题
+      icon: 'el-icon-s-home' //导航菜单图标
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/index/index.vue'),
+        name: 'indexs',
+        meta: {
+          title: "工作台",
+          icon: 'el-icon-s-home',
+          //哪些用户能看的数组
+          // roles: ['admin','jerry']
         }
-      ]
+      }
+    ]
   }
 ]
 
@@ -111,7 +111,7 @@ export const asyncRoutes = [
           icon: 'el-icon-tickets',
           hidden: true,
           roles: ['admin','jerry'],
-          
+
         }
       },
       {
@@ -277,8 +277,8 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/coupon/addCoupon',
     meta:{
-      title: "卡券管理",
-      icon: 'el-icon-s-help',
+      title: "商品大厅",
+      icon: 'el-icon-lollipop',
       hidden: false,
     },
     children: [
@@ -298,8 +298,8 @@ export const asyncRoutes = [
         component: () => import('@/views/coupon/CouponList.vue'),
         name: 'couponlist',
         meta: {
-          title: "优惠券列表",
-          icon: 'el-icon-message',
+          title: "商品列表",
+          icon: 'el-icon-platform-eleme',
           hidden: false,
           roles: ['admin','jerry']
         }

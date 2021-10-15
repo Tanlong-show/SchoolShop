@@ -1,9 +1,9 @@
 package com.tl.school.controller;
 
 
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <p>
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * </p>
  *
  * @author tl
- * @since 2021-10-08
+ * @since 2021-10-15
  */
 @Controller
 @RequestMapping("/school/friendship")

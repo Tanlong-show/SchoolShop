@@ -1,7 +1,7 @@
 <template>
     <div class="drop">
         <div class="drop-left">
-            <img src="http://public.nodebook.top/20200319164136.jpg" />
+            <img src="" />
         </div>
         <div class="drop-right">
             <p>{{text}}</p>

@@ -10,7 +10,7 @@
                     <div class="index-head-centent-left">
                         <el-avatar style="margin-right: 10px;" :size="56" :src="circleUrl"></el-avatar>
                         <div class="index-head-centent-left-text">
-                            <p>早上好,{{username}},祝你新的一天工作愉快</p>
+                            <p>早上好,{{user.name}},祝你新的一天工作愉快</p>
                             <p>今天小雨转阴天,21~27°,天凉,注意加衣</p>
                         </div>
                     </div>
@@ -133,10 +133,6 @@
     import Colleague from '../../components/Index/colleague'
 
     export default {
-        data: {
-            userId: "",
-            username: "",
-        },
 
         created() {
             let userId = this.$route.query.userid
@@ -145,21 +141,33 @@
                 .post("/consumer/getUser?userid=" + userId)
                 .then(response => {
                     console.log(response.data)
-                    this.username=response.data.name
+                    this.user = response.data
                 })
+
 
         },
 
+
         mounted() {
+            var s = this.user.headpicture
+            // alert(this.user.headpicture)
+            //这个地方设成http连接
+            this.circleUrl = require('E:/picturecore/'+s)
 
         },
 
 
         data() {
-
             return {
-                username: this.username,
-                circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+                user: {
+                    userId: "",
+                    name: "",
+                    headpicture: "",
+                    root: ""
+                },
+                //后期改成数据库传递过来，用域名的方式展示图片，本地不能加载到图片
+                circleUrl: require('E:/picturecore/make.jpeg'),
+
             }
 
 

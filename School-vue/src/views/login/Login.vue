@@ -32,7 +32,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input v-model="loginForm.password" placeholder="请输入密码" size="medium">
+                        <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" size="medium">
                             <el-button slot="prepend" icon="el-icon-key"></el-button>
                         </el-input>
                     </el-form-item>
@@ -51,6 +51,7 @@
 <script>
     export default {
         data() {
+
             let letterRule = (rule, value, callback) => {
                 let reg = /^[a-zA-Z0-9_-]{4,18}$/
                 if (value === '') {
