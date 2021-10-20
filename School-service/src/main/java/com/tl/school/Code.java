@@ -20,7 +20,7 @@ public class Code {
         //1、全局配置
         GlobalConfig gc = new GlobalConfig();
 //        String property = System.getProperty("E:\\IDEA\\SchoolShop\\School-service\\");//获取用户生成的目录
-        gc.setOutputDir("E:/IDEA/SchoolShop/School-service/src/main/java");
+        gc.setOutputDir("E:/IDEA/MMMMMMMMMMM");
         gc.setAuthor("tl");
         gc.setFileOverride(true);//是否覆盖原来生成的
         gc.setServiceName("%sService");//去Service的I前缀

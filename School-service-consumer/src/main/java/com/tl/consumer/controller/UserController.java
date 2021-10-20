@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
  * @since 2021-10-08
  */
 @RestController
-@RequestMapping("/consumer")
+@RequestMapping("/consumer/user")
 class UserController {
 
     @Autowired

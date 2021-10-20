@@ -101,7 +101,7 @@
                     password: this.loginForm.password,
                 }
                 this.$axios
-                    .post("/consumer/validateUser?userid=" + data.userid + "&password=" + data.password)
+                    .post("/consumer/user/validateUser?userid=" + data.userid + "&password=" + data.password)
                     .then(response => {
                         if(response.data=="登陆成功"){
                             this.$message.success('登陆成功');

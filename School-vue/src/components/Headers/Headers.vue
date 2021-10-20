@@ -100,7 +100,7 @@
             let userId = this.$route.query.userid
 
             this.$axios
-                .post("/consumer/getUser?userid=" + userId)
+                .post("/consumer/user/getUser?userid=" + userId)
                 .then(response => {
                     // console.log(response.data)
                     this.user = response.data

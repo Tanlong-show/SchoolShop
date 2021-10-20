@@ -21,4 +21,8 @@ public interface FeginClient {
     @RequestMapping(value = "/user/getUser")
     String getUser(@RequestParam("userid") String userid);
 
+    @LoadBalanced //负载均衡
+    @RequestMapping(value = "/goods/getGoodsList")
+    String getGoodsList();
+
 }

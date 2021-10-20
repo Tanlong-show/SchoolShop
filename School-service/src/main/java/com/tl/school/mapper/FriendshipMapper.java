@@ -2,6 +2,7 @@ package com.tl.school.mapper;
 
 import com.tl.school.entity.Friendship;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author tl
  * @since 2021-10-15
  */
+@Repository
 public interface FriendshipMapper extends BaseMapper<Friendship> {
 
 }
