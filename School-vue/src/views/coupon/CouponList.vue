@@ -47,7 +47,7 @@
 
         <el-dialog title="购物车列表" :visible.sync="CouponListShow" style="height: 700px; font-weight: bolder">
             <el-scrollbar style="height:100%">
-                <el-form :model="CouponListForm" :rules="CouponListRules" ref="CouponListForm">
+                <el-form>
 
 
                     <el-form-item v-for="(v,index) in json.list2" :label-width="CouponListWidth" prop="name">
@@ -66,7 +66,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button type="danger" style="float: left;" @click="clearList">清空</el-button>
-                <el-button @click="CouponListSubmit('CouponListForm')" type="success">添 加</el-button>
+                <el-button @click="CouponListSubmit()" :disabled="totalPrice()==0 ? true : false" type="success">提交</el-button>
             </div>
         </el-dialog>
     </div>
@@ -100,38 +100,8 @@
                 tableData: [],
                 // 弹出层
                 CouponListShow: false,
-                CouponListForm: {
-                    name: '',
-                    start: '',
-                    end: '',
-                    amount: 0.10,
-                    sum: 0.00,
-                    message: ''
-                },
-                CouponListRules: {
-                    name: [
-                        {required: true, message: '请输入优惠券类型', trigger: 'blur'},
-                        {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
-                    ],
-                    message: [
-                        {required: true, message: '请输入使用有限期描述', trigger: 'blur'},
-                        {min: 2, max: 25, message: '长度在 2 到 25 个字符', trigger: 'blur'}
-                    ],
-                    amount: [
-                        {required: true, message: '请输入优惠券金额', trigger: 'blur'},
-                    ],
-                    sum: [
-                        {required: true, message: '请输入优惠券最低满减金额', trigger: 'blur'},
-                    ],
-                    start: [
-                        {required: true, message: '请选择开始时间', trigger: 'blur'},
-                    ],
-                    end: [
-                        {required: true, message: '请选择结束时间', trigger: 'blur'},
-                    ]
-                },
-                CouponListWidth: '120px',
 
+                CouponListWidth: '120px',
                 json: {
 
                     list: [],
@@ -141,15 +111,23 @@
             }
         },
         methods: {
-            CouponListSubmit(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+            CouponListSubmit() {
+                this.$axios
+                    .post("/consumer/goods/getGoodsList")
+                    .data(this.json.list2)
+                    .then(response => {
+
+                        // this.json.list[0].pictureUrl='https://img0.baidu.com/it/u=3481486975,4218348512&fm=26&fmt=auto'
+                    })
+                // 发送 POST 请求
+                // axios({
+                //     method: 'post',
+                //     url: '/user/12345',
+                //     data: {
+                //         firstName: 'Fred',
+                //         lastName: 'Flintstone'
+                //     }
+                // });
             },
 
             addShop(id, money){
