@@ -1,7 +1,7 @@
 package com.tl.school.service;
 
-import com.tl.school.entity.Friendship;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tl.common.entity.Friendship;
 
 /**
  * <p>

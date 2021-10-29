@@ -22,7 +22,7 @@ public class Code {
 //        String property = System.getProperty("E:\\IDEA\\SchoolShop\\School-service\\");//获取用户生成的目录
         gc.setOutputDir("E:/IDEA/MMMMMMMMMMM");
         gc.setAuthor("tl");
-        gc.setFileOverride(true);//是否覆盖原来生成的
+        gc.setFileOverride(false);//是否覆盖原来生成的
         gc.setServiceName("%sService");//去Service的I前缀
         gc.setIdType(IdType.ASSIGN_ID);//entity的Id生成策略
         gc.setSwagger2(true);

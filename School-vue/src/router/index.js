@@ -372,6 +372,17 @@ export const asyncRoutes = [
           roles: ['admin','jerry']
         }
       },
+      {
+        path: 'home',
+        component: () => import('@/views/home/Orders.vue'),
+        name: 'homeOrders',
+        meta: {
+          title: "我的订单",
+          icon: 'el-icon-menu',
+          hidden: false,
+          roles: ['admin','jerry']
+        }
+      },
     ]
   }
 ]

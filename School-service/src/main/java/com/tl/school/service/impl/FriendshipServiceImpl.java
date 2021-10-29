@@ -1,6 +1,6 @@
 package com.tl.school.service.impl;
 
-import com.tl.school.entity.Friendship;
+import com.tl.common.entity.Friendship;
 import com.tl.school.mapper.FriendshipMapper;
 import com.tl.school.service.FriendshipService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

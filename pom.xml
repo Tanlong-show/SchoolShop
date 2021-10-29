@@ -12,6 +12,7 @@
         <module>School-service</module>
         <module>Eureka</module>
         <module>School-service-consumer</module>
+        <module>School-common</module>
     </modules>
 
     <parent>

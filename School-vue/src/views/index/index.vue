@@ -142,19 +142,13 @@
                 .then(response => {
                     console.log(response.data)
                     this.user = response.data
+                    this.circleUrl = response.data.headpicture
+
                 })
 
 
         },
 
-
-        mounted() {
-            var s = this.user.headpicture
-            // alert(this.user.headpicture)
-            //这个地方设成http连接
-            this.circleUrl = require('E:/picturecore/'+s)
-
-        },
 
 
         data() {
@@ -166,7 +160,7 @@
                     root: ""
                 },
                 //后期改成数据库传递过来，用域名的方式展示图片，本地不能加载到图片
-                circleUrl: require('E:/picturecore/make.jpeg'),
+                circleUrl: "",
 
             }
 

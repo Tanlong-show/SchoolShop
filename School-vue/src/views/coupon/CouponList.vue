@@ -15,8 +15,11 @@
                     <p style="font-weight: bold">产品分类：{{v.sortone}} - {{v.sorttwo}}</p>
                     <br>
                     <el-row :gutter="5">
-                        <el-button type="primary" plain class="CouponList-Info-li" size="small"
-                                   @click="addShop(index,v.price)">+购物车
+                        <el-button style="width: 45%;margin-left: 7px;" icon="el-icon-circle-plus" type="primary" plain class="CouponList-Info-li" size="small"
+                                   @click="addShop(index,v.price)">购物车
+                        </el-button>
+                        <el-button style="width: 45%;" type="success" icon="el-icon-bell" class="CouponList-Info-li" size="small"
+                                   @click="addShop(index,v.price)">联系卖家
                         </el-button>
                     </el-row>
                 </li>
@@ -113,21 +116,13 @@
         methods: {
             CouponListSubmit() {
                 this.$axios
-                    .post("/consumer/goods/getGoodsList")
-                    .data(this.json.list2)
+                    .post("/consumer/ordering/addOrdering",this.json.list2)
                     .then(response => {
 
-                        // this.json.list[0].pictureUrl='https://img0.baidu.com/it/u=3481486975,4218348512&fm=26&fmt=auto'
                     })
-                // 发送 POST 请求
-                // axios({
-                //     method: 'post',
-                //     url: '/user/12345',
-                //     data: {
-                //         firstName: 'Fred',
-                //         lastName: 'Flintstone'
-                //     }
-                // });
+                this.clearList();
+                this.$message.success('已进入订单');
+
             },
 
             addShop(id, money){

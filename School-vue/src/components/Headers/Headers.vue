@@ -105,15 +105,13 @@
                     // console.log(response.data)
                     this.user = response.data
                     //'E:\\picturecore\\make.jpeg'
+                    this.squareUrl = response.data.headpicture
+
                 })
 
         },
 
-        mounted() {
-            // var s = 'make.jpeg'
-            // squareUrl = require('E:/picturecore/make.jpeg')
 
-        },
 
         props: {
             asideShow: {
@@ -139,7 +137,7 @@
                     headpicture: "",
                     root: ""
                 },
-                squareUrl: require('E:/picturecore/make.jpeg'),
+                squareUrl: "",
                 isFullscreen: false,
                 dropShow: false, // 是否现实通知栏
                 setTime: null, //定时器

@@ -1,7 +1,7 @@
 package com.tl.school.mapper;
 
-import com.tl.school.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tl.common.entity.User;
 import org.springframework.stereotype.Repository;
 
 /**

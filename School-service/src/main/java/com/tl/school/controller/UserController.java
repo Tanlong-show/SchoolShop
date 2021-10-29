@@ -1,18 +1,15 @@
 package com.tl.school.controller;
 
 
-import com.tl.school.entity.User;
+import com.tl.common.entity.User;
 import com.tl.school.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -37,10 +34,13 @@ class UserController {
     private UserService userService;
 
     @RequestMapping("/validateUser")
-    public String validateUser(@RequestParam("userid") String userid, @RequestParam("password") String password) {
+    public String validateUser(HttpSession session, @RequestParam("userid") String userid, @RequestParam("password") String password) {
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
             if (userList.get(0).getPassword().equals(password)) {
+                session.setAttribute("user",userList.get(0));
+                System.out.println(session.getId());
+
                 return "登陆成功";
             } else {
                 return "密码错误！";

@@ -131,7 +131,7 @@
                             this.$message.error('用户不存在');
                             this.loading = false
                         }else{
-                            this.$message.error('服务器出现异常！请稍后登录');
+                            this.$message.error('服务器繁忙！请稍后登录');
                         }
 
                     })

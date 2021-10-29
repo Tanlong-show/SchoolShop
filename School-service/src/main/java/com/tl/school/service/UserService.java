@@ -1,7 +1,7 @@
 package com.tl.school.service;
 
-import com.tl.school.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tl.common.entity.User;
 
 import java.util.List;
 

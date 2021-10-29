@@ -1,7 +1,7 @@
 package com.tl.school.mapper;
 
-import com.tl.school.entity.Friendship;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tl.common.entity.Friendship;
 import org.springframework.stereotype.Repository;
 
 /**
