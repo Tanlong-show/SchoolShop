@@ -1,6 +1,7 @@
 package com.tl.consumer.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -42,7 +45,9 @@ class UserController {
     //获取用户数据
     @RequestMapping("/getUser")
     @ResponseBody
-    public String getUser(@RequestParam("userid") String userid) {
+    public String getUser(HttpServletRequest request, @RequestParam("userid") String userid) {
+        String token = request.getHeader("curUserid");
+        System.out.println("SSSSSSS: "+token);
         //调用远程服务
         String result = feginClient.getUser(userid);
         System.out.println(result);

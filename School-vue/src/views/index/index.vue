@@ -143,6 +143,7 @@
                     console.log(response.data)
                     this.user = response.data
                     this.circleUrl = response.data.headpicture
+                    localStorage.setItem("token", response.data.id);
 
                 })
 

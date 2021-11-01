@@ -1,6 +1,7 @@
 package com.tl.consumer.controller;
 
 import com.tl.common.entity.Goods;
+import com.tl.consumer.Configure.FeignInterceptor;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.List;
 
 //fallback为熔断器,ConsumerFallback为自定义的熔断器，当服务提供方出问题时的熔断转移策略。
 @Component
-@FeignClient(name = "SCHOOLSHOP-SERVICE-PROVIDER" ,fallback=ConsumerFallback.class)
+@FeignClient(name = "SCHOOLSHOP-SERVICE-PROVIDER" ,configuration ={FeignInterceptor.class},fallback=ConsumerFallback.class)
 public interface FeginClient {
 
     @LoadBalanced //负载均衡,验证用户

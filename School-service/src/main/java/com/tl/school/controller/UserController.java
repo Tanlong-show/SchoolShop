@@ -3,13 +3,19 @@ package com.tl.school.controller;
 
 import com.tl.common.entity.User;
 import com.tl.school.service.UserService;
+import io.micrometer.core.instrument.util.JsonUtils;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -38,8 +44,6 @@ class UserController {
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
             if (userList.get(0).getPassword().equals(password)) {
-                session.setAttribute("user",userList.get(0));
-                System.out.println(session.getId());
 
                 return "登陆成功";
             } else {
@@ -52,7 +56,9 @@ class UserController {
     }
 
     @RequestMapping("/getUser")
-    public User getuser(@RequestParam("userid") String userid) {
+    public User getuser(HttpServletRequest request, @RequestParam("userid") String userid) {
+        String s = request.getHeader("curUserid");
+        System.out.println("AAAAA: "+s);
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
             return userList.get(0);

@@ -88,4 +88,29 @@ window.addEventListener("beforeunload", () => {
 });
 
 
+// 添加请求拦截器
+//将token放入header中
+axios.interceptors.request.use((config) => {
+  // console.log(config)
+  if (localStorage.getItem('token') != null) {
+    config.headers.curUserid = window.localStorage.getItem('token')
+  }
+  return config
+})
+
+
+// axios.interceptors.request.use(config => {
+//   // 在发送请求之前做些什么
+//   //判断是否存在token，如果存在将每个页面header都添加token
+//   //if中的值为登陆时存入vuex中的token值
+// //如果存在token值，将token放入请求头‘Authorization’中
+//   if(store.state.token){
+//     config.headers.common['Authorization']=store.state.token
+//   }
+//
+//   return config;
+// }, error => {
+//   // 对请求错误做些什么
+//   return Promise.reject(error);
+// });
 

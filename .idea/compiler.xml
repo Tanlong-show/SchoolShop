@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="School-common" />
+        <module name="School-gateway" />
         <module name="Eureka" />
         <module name="School-service-consumer" />
         <module name="School-service" />
@@ -18,6 +19,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Eureka" options="-parameters" />
       <module name="School-common" options="-parameters" />
+      <module name="School-gateway" options="-parameters" />
       <module name="School-service" options="-parameters" />
       <module name="School-service-consumer" options="-parameters" />
     </option>
