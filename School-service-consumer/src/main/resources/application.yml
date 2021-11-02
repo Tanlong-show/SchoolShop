@@ -1,0 +1,21 @@
+spring:
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 1500
+    jedis:
+      pool:
+        max-idle: 10
+        max-wait: -1ms
+        min-idle: 2
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE  #加上这个就可以获取到HttpServletRequest
+          thread:
+            timeoutInMilliseconds: 10000

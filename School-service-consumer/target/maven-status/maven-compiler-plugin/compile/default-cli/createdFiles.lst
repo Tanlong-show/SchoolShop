@@ -1,0 +1,7 @@
+application.properties
+com\tl\consumer\controller\ConsumerFallback.class
+spy.properties
+com\tl\consumer\Code.class
+com\tl\ConsumerApplication.class
+com\tl\consumer\controller\UserController.class
+com\tl\consumer\controller\FeginClient.class
