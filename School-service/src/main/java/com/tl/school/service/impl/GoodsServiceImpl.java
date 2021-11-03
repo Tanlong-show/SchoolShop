@@ -68,5 +68,12 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
                 .like(sortOneName != null, Goods::getSortone, sortOneName)
                 .like(sortTwoName != null, Goods::getSorttwo, sortTwoName));    }
 
+    @Override
+    public void lowerShelfById(Integer id) {
+        Goods goods = goodsMapper.selectById(id);
+        goods.setState(goods.getState() == 0 ? 1 : 0);
+        goodsMapper.updateById(goods);
+    }
+
 
 }

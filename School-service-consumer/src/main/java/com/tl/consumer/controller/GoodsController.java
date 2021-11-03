@@ -60,5 +60,10 @@ public class GoodsController {
         return result;
     }
 
-
+    //多级智能条件判断搜索
+    @RequestMapping(value = "/lowerShelfById")
+    public String lowerShelfById(@RequestParam("id")Integer id){
+        String result = feginClient.lowerShelfById(id);
+        return result;
+    }
 }

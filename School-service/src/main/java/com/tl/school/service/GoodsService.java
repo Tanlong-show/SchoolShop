@@ -27,4 +27,5 @@ public interface GoodsService extends IService<Goods> {
 
     List<Goods>findGoodAdvancedByUserId(String userId, String name, String sortOneName, String sortTwoName);
 
+    void lowerShelfById(Integer id);
 }

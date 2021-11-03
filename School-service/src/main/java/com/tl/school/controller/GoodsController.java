@@ -61,5 +61,12 @@ public class GoodsController {
         return goodsList;
     }
 
+    @RequestMapping(value = "/lowerShelfById")
+    public void lowerShelfById(@RequestParam("id")Integer id){
+        //上下架通用
+        goodsService.lowerShelfById(id);
+
+    }
+
 }
 

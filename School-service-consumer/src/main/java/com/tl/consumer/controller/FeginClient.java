@@ -54,4 +54,11 @@ public interface FeginClient {
     @LoadBalanced //负载均衡,查找当前用户商品信息
     @RequestMapping(value = "/goods/getGoodsListByUserId")
     String getGoodsListByUserId(@RequestParam("token")String token,@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName);
+
+    @LoadBalanced //负载均衡,批量删除订单
+    @RequestMapping(value = "/goods/lowerShelfById")
+    String lowerShelfById(@RequestParam("id")Integer id);
+
+
+
 }

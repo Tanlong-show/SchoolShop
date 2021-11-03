@@ -62,4 +62,10 @@ public class ConsumerFallback implements FeginClient {
         return "Feign客户端访问失败!";
     }
 
+    @Override
+    public String lowerShelfById(Integer id) {
+        return "Feign客户端访问失败!";
+    }
+
+
 }

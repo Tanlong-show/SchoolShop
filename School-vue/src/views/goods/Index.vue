@@ -146,11 +146,11 @@
                             width="150">
                         <template slot-scope="scope">　　
                             <el-button type="danger" v-if="scope.row.state == 0 ? false : true"
-                                       @click="deleteById(scope.row.id)" class="goodsindex-queryInfo-li"
+                                       @click="lowerShelfById(scope.row.id),scope.row.state = 0" class="goodsindex-queryInfo-li"
                                        size="small">下架
                             </el-button>
                             <el-button type="success" v-if="scope.row.state == 1 ? false : true"
-                                       @click="deleteById(scope.row.id)" class="goodsindex-queryInfo-li"
+                                       @click="lowerShelfById(scope.row.id),scope.row.state = 1" class="goodsindex-queryInfo-li"
                                        size="small">上架
                             </el-button>
                         </template>
@@ -369,6 +369,14 @@
                 this.queryInfo.name = this.queryInfo.type = this.queryInfo.type2 = '';
                 this.selectAdvance();
             },
+            //上下架通用
+            lowerShelfById(id){
+                this.$axios
+                    .post("/consumer/goods/lowerShelfById?id="+id)
+                this.$message.success("修改成功");
+
+            },
+
 
         }
     }
