@@ -97,7 +97,7 @@
         },
 
         created() {
-            let userId = this.$route.query.userid
+            var userId = localStorage.getItem("token")
 
             this.$axios
                 .post("/consumer/user/getUser?userid=" + userId)
@@ -197,7 +197,7 @@
                 switch (command) {
                     case 'github':
 
-                        window.open('https://github.com/cgq001/admin-menu/tree/2.0')
+                        window.open('')
                         break;
                     case 'quit':
                         let src = this.$store.dispatch('user/resetToken')
@@ -236,7 +236,7 @@
             },
             // 去github
             goGithub() {
-                window.open('https://github.com/cgq001/admin-menu/tree/2.0')
+                window.open('')
             }
         },
         mounted() {

@@ -96,7 +96,7 @@ export const asyncRoutes = [
         component: () => import('@/views/goods/Index.vue'),
         name: 'goodsindex',
         meta: {
-          title: "在售产品",
+          title: "产品管理",
           icon: 'el-icon-tickets',
           hidden: false,
           roles: ['admin','jerry']

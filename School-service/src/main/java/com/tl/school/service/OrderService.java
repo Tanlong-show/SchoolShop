@@ -19,6 +19,6 @@ public interface OrderService extends IService<Orders> {
 
     public List<Orders> selectOrderBystatusAndUserId(Integer status, Integer userId);
 
-    public void deleteOrdersByOrdNum(List<String>list);
+    public void deleteOrdersByOrdNum(List<String>list, Integer userId);
 
 }

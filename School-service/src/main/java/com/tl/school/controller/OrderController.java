@@ -35,15 +35,16 @@ public class OrderController {
 
     //添加订单
     @RequestMapping("/addOrdering")
-    public void addOrdering(HttpServletRequest request, @RequestBody List<Goods> goods) {
+    public void addOrdering(@RequestParam("token")String token, @RequestBody List<Goods> goods) {
 
         for (int i = 0; i < goods.size(); i++) {
             Orders order = new Orders();
             order.setState(0);
             //暂时写死，后面实现springcloud的session一致性再改
-            order.setBuyerId(1);
+            //已改，通过提供方headers提取转发的
+            order.setBuyerId(Integer.parseInt(token));
             order.setGoodsId(goods.get(i).getId());
-            String s = "TL"+ (int)(Math.random()*1000000);
+            String s = "TL"+ (int)(Math.random()*100000000);
             order.setOrdNumber(s);
             order.setSellerId(goods.get(i).getUserId());
             orderService.addOrdering(order);
@@ -54,8 +55,8 @@ public class OrderController {
 
     //根据不同状态获取订单
     @RequestMapping("/orderingStatus")
-    public List<OrdersShop> orderingStatus(@RequestParam("status") Integer status) {
-        int userId = 1; //后面改为全局获取session统一
+    public List<OrdersShop> orderingStatus(@RequestParam("token")String token, @RequestParam("status") Integer status) {
+        int userId = Integer.parseInt(token);
         List<OrdersShop> ordersShopList = new ArrayList<>();
         //找出对应订单
         List<Orders> ordersList = orderService.selectOrderBystatusAndUserId(status, userId);
@@ -82,10 +83,10 @@ public class OrderController {
 
     //批量删除订单
     @RequestMapping("/deleteOrdeing")
-    public void deleteOrdeing(@RequestParam("list")String list){
-        System.out.println(list);
+    public void deleteOrdeing(@RequestParam("token")String token, @RequestParam("list")String list){
+
         List<String>stringList = Arrays.asList(list.split(","));
-        orderService.deleteOrdersByOrdNum(stringList);
+        orderService.deleteOrdersByOrdNum(stringList, Integer.parseInt(token));
     }
 
 }

@@ -2,6 +2,7 @@ package com.tl.consumer.controller;
 
 import com.tl.common.entity.Goods;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,17 +27,38 @@ public class ConsumerFallback implements FeginClient {
     }
 
     @Override
-    public String addOrdering(List<Goods> order) {
+    public String getGoodsSortOne(String sortOneName) {
         return "Feign客户端访问失败!";
     }
 
     @Override
-    public String orderingStatus(Integer status) {
+    public String getGoodsSortTwo(String sortOneName, String sortTwoName) {
         return "Feign客户端访问失败!";
     }
 
     @Override
-    public String deleteOrdeing(String list) {
+    public String getGoodsAdvanced(String name, String sortOneName, String sortTwoName) {
+        return "Feign客户端访问失败!";
+    }
+
+
+    @Override
+    public String addOrdering(List<Goods> order, @RequestParam("token") String token) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String orderingStatus(Integer status, @RequestParam("token") String token) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String deleteOrdeing(String list, @RequestParam("token") String token) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getGoodsListByUserId(String token, String name, String sortOneName, String sortTwoName) {
         return "Feign客户端访问失败!";
     }
 

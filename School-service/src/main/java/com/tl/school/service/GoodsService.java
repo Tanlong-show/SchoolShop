@@ -19,4 +19,12 @@ public interface GoodsService extends IService<Goods> {
 
     Goods findGoodById(Integer id);
 
+    List<Goods>findGoodsSortOne(String sortOneName);
+
+    List<Goods>findGoodsSortTwo(String sortOneName, String sortTwoName);
+
+    List<Goods>findGoodAdvanced(String name, String sortOneName, String sortTwoName);
+
+    List<Goods>findGoodAdvancedByUserId(String userId, String name, String sortOneName, String sortTwoName);
+
 }

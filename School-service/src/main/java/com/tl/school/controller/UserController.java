@@ -41,6 +41,7 @@ class UserController {
 
     @RequestMapping("/validateUser")
     public String validateUser(HttpSession session, @RequestParam("userid") String userid, @RequestParam("password") String password) {
+        //这里通过登陆账号验证
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
             if (userList.get(0).getPassword().equals(password)) {
@@ -57,8 +58,7 @@ class UserController {
 
     @RequestMapping("/getUser")
     public User getuser(HttpServletRequest request, @RequestParam("userid") String userid) {
-        String s = request.getHeader("curUserid");
-        System.out.println("AAAAA: "+s);
+        //这里通过登陆账号验证
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
             return userList.get(0);

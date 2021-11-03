@@ -45,12 +45,9 @@ class UserController {
     //获取用户数据
     @RequestMapping("/getUser")
     @ResponseBody
-    public String getUser(HttpServletRequest request, @RequestParam("userid") String userid) {
-        String token = request.getHeader("curUserid");
-        System.out.println("SSSSSSS: "+token);
+    public String getUser(@RequestParam("userid") String userid) {
         //调用远程服务
         String result = feginClient.getUser(userid);
-        System.out.println(result);
         return result;
     }
 

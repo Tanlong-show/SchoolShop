@@ -38,11 +38,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     }
 
     @Override
-    public void deleteOrdersByOrdNum(List<String> list) {
+    public void deleteOrdersByOrdNum(List<String> list, Integer userId) {
         for (int i = 0; i < list.size(); i++) {
             orderMapper.delete(
                     Wrappers.<Orders>lambdaQuery()
-                            .eq(Orders::getOrdNumber, list.get(i)));
+                            .eq(Orders::getOrdNumber, list.get(i))
+                            .eq(Orders::getBuyerId, userId));
         }
     }
 }

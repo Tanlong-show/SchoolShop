@@ -1,7 +1,7 @@
 <template>
     <div class="Information">
         <div class="Information-title">
-            <el-button type="danger" @click="deleteSelect" size="mini">删除</el-button>
+            <el-button type="danger" :disabled="this.multipleSelection.length==0 ? true : false" @click="deleteSelect" size="mini">删除</el-button>
         </div>
         <div class="Information-table">
             <el-table
@@ -93,14 +93,12 @@
                 this.$axios
                     .post("/consumer/ordering/orderingStatus?status=" + this.parent)
                     .then(response => {
-                        console.log(response.data)
                         this.ordersShop = response.data
 
                         // this.json.list[0].pictureUrl='https://img0.baidu.com/it/u=3481486975,4218348512&fm=26&fmt=auto'
                     })
             },
             deleteSelect() {
-                console.log(this.multipleSelection.at(0))
                 for (let i = 0; i < this.multipleSelection.length; i++) {
                     this.mulIdSelect.push(this.multipleSelection.at(i).ordNumber);
                 }
@@ -111,6 +109,8 @@
                     for (let j = 0; j < this.multipleSelection.length; j++) {
                         if(this.ordersShop[i].ordNumber == this.multipleSelection.at(j).ordNumber){
                             this.ordersShop.splice(i,1);
+                            i--;
+                            break;
                         }
                     }
                 }

@@ -135,21 +135,18 @@
     export default {
 
         created() {
-            let userId = this.$route.query.userid
-
+            var userId = localStorage.getItem("token")
             this.$axios
                 .post("/consumer/user/getUser?userid=" + userId)
                 .then(response => {
-                    console.log(response.data)
+
                     this.user = response.data
                     this.circleUrl = response.data.headpicture
-                    localStorage.setItem("token", response.data.id);
 
                 })
 
 
         },
-
 
 
         data() {

@@ -103,9 +103,16 @@
                 this.$axios
                     .post("/consumer/user/validateUser?userid=" + data.userid + "&password=" + data.password)
                     .then(response => {
-                        if(response.data=="登陆成功"){
+                        if (response.data == "登陆成功") {
                             this.$message.success('登陆成功');
                             //如果用户存在并正确则赋予admin令牌，后期考虑jerry身份为管理员或者普通用户，在store/moudles/user.js
+                            this.$axios
+                                .post("/consumer/user/getUser?userid=" + data.userid)
+                                .then(response => {
+
+                                    localStorage.setItem("token", response.data.userId)
+
+                                })
                             this.$store
                                 .dispatch('user/login', {username: "admin"})//admin为令牌
                                 .then(() => {
@@ -113,7 +120,7 @@
                                     // 登陆成功后重定向
                                     this.$router.push({
                                         path: this.$route.query.redirect || '/index',
-                                        query:{userid: data.userid}
+                                        query: {userid: data.userid}
                                     })
 
                                 })
@@ -121,16 +128,16 @@
                                     this.loading = true
                                     // console.log(err)
                                 })
-                        }else if(response.data=="密码错误！"){
+                        } else if (response.data == "密码错误！") {
 
                             this.$message.warning('密码错误');
                             this.loading = false
 
-                        }else if(response.data=="此账户不存在！"){
+                        } else if (response.data == "此账户不存在！") {
 
                             this.$message.error('用户不存在');
                             this.loading = false
-                        }else{
+                        } else {
                             this.$message.error('服务器繁忙！请稍后登录');
                         }
 

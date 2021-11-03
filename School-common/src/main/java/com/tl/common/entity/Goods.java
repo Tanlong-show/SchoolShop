@@ -58,6 +58,9 @@ public class Goods implements Serializable {
     @ApiModelProperty(value = "视频路径")
     private String videoUrl;
 
+    @ApiModelProperty(value = "0-未上架 1-已上架")
+    private Integer state;
+
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")

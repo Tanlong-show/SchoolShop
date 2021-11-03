@@ -27,17 +27,31 @@ public interface FeginClient {
     @RequestMapping(value = "/goods/getGoodsList")
     String getGoodsList();
 
+    @LoadBalanced //负载均衡,获取一级分类
+    @RequestMapping(value = "/goods/getGoodsSortOne")
+    String getGoodsSortOne(@RequestParam("sortOneName")String sortOneName);
+
+    @LoadBalanced //负载均衡,获取一级对应二级分类
+    @RequestMapping(value = "/goods/getGoodsSortTwo")
+    String getGoodsSortTwo(@RequestParam("sortOneName")String SortOneName, @RequestParam("sortTwoName")String sortTwoName);
+
+    @LoadBalanced //负载均衡,智能多级搜索
+    @RequestMapping(value = "/goods/getGoodsAdvanced")
+    String getGoodsAdvanced(@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName);
+
     @LoadBalanced //负载均衡,添加订单
     @RequestMapping(value = "/ordering/addOrdering")
-    String addOrdering(List<Goods> order);
+    String addOrdering(List<Goods> order, @RequestParam("token")String token);
 
     @LoadBalanced //负载均衡,获取特定状态订单
     @RequestMapping(value = "/ordering/orderingStatus")
-    String orderingStatus(@RequestParam("status")Integer status);
+    String orderingStatus(@RequestParam("status")Integer status, @RequestParam("token")String token);
 
     @LoadBalanced //负载均衡,批量删除订单
     @RequestMapping(value = "/ordering/deleteOrdeing")
-    String deleteOrdeing(@RequestParam("list")String list);
+    String deleteOrdeing(@RequestParam("list")String list, @RequestParam("token")String token);
 
-
+    @LoadBalanced //负载均衡,查找当前用户商品信息
+    @RequestMapping(value = "/goods/getGoodsListByUserId")
+    String getGoodsListByUserId(@RequestParam("token")String token,@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName);
 }
