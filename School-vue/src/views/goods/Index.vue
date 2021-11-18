@@ -42,8 +42,8 @@
                 </el-button>
             </el-col>
 
-            <el-col :xs="6" :sm="4" :md="3" :lg="2" :xl="2" :offset="1">
-                <el-button type="primary" class="Carousel-Info-li" size="small" @click="CarouselShow = true">添加
+            <el-col :xs="6" :sm="4" :md="3" :lg="2" :xl="2">
+                <el-button type="success" class="goodsindex-queryInfo-li" size="small" @click="addFromGood">添加
                 </el-button>
             </el-col>
         </el-row>
@@ -51,47 +51,11 @@
         <hr>
 
 
-        <!-- 添加或编辑关键词 -->
-        <el-dialog title="添加轮播图" :visible.sync="CarouselShow">
-            <el-form :model="CarouselForm" :rules="CarouselRules" ref="CarouselForm">
-                <el-form-item label="名称" :label-width="CarouselWidth" prop="name">
-                    <el-input v-model="CarouselForm.name" autocomplete="off" placeholder="请输入关键词"></el-input>
-                </el-form-item>
-                <el-form-item label="图片" :label-width="CarouselWidth" prop="url">
-                    <el-upload
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            list-type="picture-card"
-                            :on-preview="handlePictureCardPreview"
-                            :on-remove="handleRemove">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="dialogVisible">
-                        <img width="100%" :src="dialogImageUrl" alt="">
-                    </el-dialog>
-                </el-form-item>
-                <el-form-item label="跳转类型" :label-width="CarouselWidth" prop="type">
-                    <el-select v-model="CarouselForm.type" placeholder="请选择跳转类型">
-                        <el-option label="外部连接" :value="1"></el-option>
-                        <el-option label="内部连接" :value="2"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="外部链接地址" :label-width="CarouselWidth" prop="linl">
-                    <el-input v-model="CarouselForm.link" autocomplete="off" placeholder="请输入外部链接地址"></el-input>
-                </el-form-item>
-                <el-form-item label="内部链接地址" :label-width="CarouselWidth" prop="linl">
-                    <el-input v-model="CarouselForm.router" autocomplete="off" placeholder="请输入内部链接地址"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="CarouselSubmit('CarouselForm')" type="primary">添 加</el-button>
-            </div>
-        </el-dialog>
-
         <!-- 检索结果 -->
         <el-row :gutter="20" class="goodsindex-list">
             <el-col :span="24">
                 <el-table
-                        :data="this.json.list"
+                        :data="this.json.list.slice((queryInfo.page - 1) * queryInfo.pageSize, queryInfo.page * queryInfo.pageSize)"
                         border
                         size='small'
                         style="width: 100%">
@@ -103,7 +67,7 @@
                     <el-table-column
                             prop="name"
                             label="产品名称"
-                            width="180">
+                            width="150">
                     </el-table-column>
                     <el-table-column
                             prop="pictureUrl"
@@ -126,8 +90,8 @@
                             width="120">
                     </el-table-column>
                     <el-table-column
-                            prop="number"
-                            label="库存"
+                            prop="price"
+                            label="价格(元)"
                             width="80">
                     </el-table-column>
                     <el-table-column
@@ -138,20 +102,32 @@
                     <el-table-column
                             prop="createTime"
                             label="创建时间"
-                            width="180">
+                            width="120">
                     </el-table-column>
                     <el-table-column
                             prop="createTime"
                             label="下架"
                             width="150">
                         <template slot-scope="scope">　　
-                            <el-button type="danger" v-if="scope.row.state == 0 ? false : true"
-                                       @click="lowerShelfById(scope.row.id),scope.row.state = 0" class="goodsindex-queryInfo-li"
+                            <el-button type="danger"
+                                       v-if="scope.row.state == 0 ? false : true && scope.row.state != 2 && scope.row.state != 3"
+                                       @click="lowerShelfById(scope.row.id),scope.row.state = 0"
+                                       class="goodsindex-queryInfo-li"
                                        size="small">下架
                             </el-button>
-                            <el-button type="success" v-if="scope.row.state == 1 ? false : true"
-                                       @click="lowerShelfById(scope.row.id),scope.row.state = 1" class="goodsindex-queryInfo-li"
+                            <el-button type="success"
+                                       v-if="scope.row.state == 1 ? false : true && scope.row.state != 2 && scope.row.state != 3"
+                                       @click="lowerShelfById(scope.row.id),scope.row.state = 1"
+                                       class="goodsindex-queryInfo-li"
                                        size="small">上架
+                            </el-button>
+                            <el-button :disabled="true" type="warning" v-if="scope.row.state == 2"
+                                       class="goodsindex-queryInfo-li"
+                                       size="small">创建审核中
+                            </el-button>
+                            <el-button :disabled="true" type="warning" v-if="scope.row.state == 3"
+                                       class="goodsindex-queryInfo-li"
+                                       size="small">修改审核中
                             </el-button>
                         </template>
 
@@ -161,8 +137,18 @@
                             label="修改信息"
                             width="150">
                         <template slot-scope="scope">　　
-                            <el-button type="primary" @click="modifyById(scope.row.id)" class="goodsindex-queryInfo-li"
+                            <el-button type="primary" @click="modifyGood(scope.row.id)" class="goodsindex-queryInfo-li"
                                        size="small">修改信息
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="createTime"
+                            label="修改信息"
+                            width="100">
+                        <template slot-scope="scope">　　
+                            <el-button type="primary" @click="checkGood(scope.row.id)" class="goodsindex-queryInfo-li"
+                                       size="small">审计
                             </el-button>
                         </template>
                     </el-table-column>
@@ -173,14 +159,14 @@
         <el-row :gutter="20" class="goodsindex-list">
             <el-col :span="24" class="goodsindex-page-box">
                 <el-pagination
-                        :hide-on-single-page="true"
+                        :hide-on-single-page="false"
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="queryInfo.page"
                         :page-sizes="[10, 20, 50, 100]"
                         :page-size="queryInfo.pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="400">
+                        :total="queryInfo.total">
                 </el-pagination>
             </el-col>
         </el-row>
@@ -198,7 +184,7 @@
                 .then(response => {
                     this.json.list = response.data
                     // this.json.list[0].pictureUrl='https://img0.baidu.com/it/u=3481486975,4218348512&fm=26&fmt=auto'
-
+                    this.queryInfo.total = response.data.length
                     //一级分类数据处理
                     for (let i = 0; i < this.json.list.length; i++) {
                         this.sortOne.value = this.json.list[i].sortone
@@ -252,7 +238,8 @@
                     type: '',
                     type2: '',
                     page: 1,
-                    pageSize: 10
+                    pageSize: 10,
+                    total: 0,
                 },
 
                 //一二级对象公用即可
@@ -263,55 +250,41 @@
                 options: [],
                 //二级分类数据
                 options2: [],
-
-                tableData: [],
-                // 上传
-                dialogImageUrl: '',
-                dialogVisible: false,
-                // 弹出层
-                CarouselShow: false,
-                CarouselForm: {
-                    name: '',
-                    type: '',
-                    linl: '',
-                    url: ''
-                },
-                CarouselRules: {
-                    name: [
-                        {required: true, message: '请输入轮播图名称', trigger: 'blur'},
-                        {min: 1, max: 10, message: '长度为 1~10 个字符', trigger: 'blur'}
-                    ],
-                    type: [
-                        {required: true, message: '请选择跳转类型', trigger: 'change'}
-                    ],
-                    url: [
-                        {required: true, message: '请选择图片', trigger: 'change'}
-                    ],
-                    linl: [
-                        {required: true, validator: validatelinl, trigger: 'blur'}
-                    ]
-                },
-                CarouselWidth: '120px'
             }
         },
         methods: {
-            handleSizeChange() {
-
+            handleSizeChange(val) {
+                this.queryInfo.pageSize = val;
             },
-            handleCurrentChange() {
-
+            handleCurrentChange(val) {
+                this.queryInfo.page = val
             },
 
-            CarouselSubmit(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+            //修改产品跳转
+            modifyGood(val) {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/goods/fromgood',
+                    query: {id: val}
+                })
             },
+
+            //审计跳转
+            checkGood(val) {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/goods/audit',
+                    query: {id: val}
+                })
+            },
+
+            //添加产品跳转
+            addFromGood() {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/goods/fromgood',
+                    query: {id: 0}
+                })
+            },
+
+
             handleRemove(file, fileList) {
                 console.log(file, fileList);
             },
@@ -364,15 +337,16 @@
                             this.json.list = response.data;
                         }
                     })
+                this.queryInfo.page = 1;
             },
             clearAdvanced() {
                 this.queryInfo.name = this.queryInfo.type = this.queryInfo.type2 = '';
                 this.selectAdvance();
             },
             //上下架通用
-            lowerShelfById(id){
+            lowerShelfById(id) {
                 this.$axios
-                    .post("/consumer/goods/lowerShelfById?id="+id)
+                    .post("/consumer/goods/lowerShelfById?id=" + id)
                 this.$message.success("修改成功");
 
             },

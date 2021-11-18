@@ -2,11 +2,9 @@ package com.tl.consumer.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tl.common.entity.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -19,7 +17,7 @@ public class GoodsController {
     private FeginClient feginClient;
 
 
-    //查询所有产品列表
+    //查询所某个用户有产品列表
     @RequestMapping("/getGoodsListByUserId")
     @ResponseBody
     public String getGoodsListByUserId(HttpServletRequest request,@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName) {
@@ -62,8 +60,34 @@ public class GoodsController {
 
     //多级智能条件判断搜索
     @RequestMapping(value = "/lowerShelfById")
-    public String lowerShelfById(@RequestParam("id")Integer id){
-        String result = feginClient.lowerShelfById(id);
+    public String lowerShelfById(HttpServletRequest request,@RequestParam("id")Integer id){
+        String token = request.getHeader("curUserid");
+        String result = feginClient.lowerShelfById(token, id);
         return result;
     }
+
+    //根据产品id查信息
+    @RequestMapping(value = "/getGoodsById")
+    public String getGoodsById(@RequestParam("id")Integer id){
+        String result = feginClient.getGoodsById(id);
+        return result;
+    }
+
+    //更新、添加产品
+    @RequestMapping(value = "/updateGoods")
+    public void updateGoods(HttpServletRequest request,@RequestBody Goods goods){
+        //token这里则是userid
+        String token = request.getHeader("curUserid");
+        feginClient.updateGoods(token, goods);
+    }
+
+    //更新、添加产品
+    @RequestMapping(value = "/getAuditShow")
+    public String getAuditShow(@RequestParam("id")Integer id){
+
+        String result = feginClient.getAuditShow(id);
+        return result;
+    }
+
+
 }

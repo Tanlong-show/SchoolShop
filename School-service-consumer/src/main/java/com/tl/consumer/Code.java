@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-
 import java.util.Arrays;
 
 public class Code {
@@ -21,9 +20,9 @@ public class Code {
         //1、全局配置
         GlobalConfig gc = new GlobalConfig();
 //        String property = System.getProperty("E:\\IDEA\\SchoolShop\\School-service\\");//获取用户生成的目录
-        gc.setOutputDir("E:/IDEA/SchoolShop/School-service/src/main/java");
+        gc.setOutputDir("E:/copyCode");
         gc.setAuthor("tl");
-        gc.setFileOverride(true);//是否覆盖原来生成的
+        gc.setFileOverride(false);//是否覆盖原来生成的
         gc.setServiceName("%sService");//去Service的I前缀
         gc.setIdType(IdType.ASSIGN_ID);//entity的Id生成策略
         gc.setSwagger2(true);
@@ -32,16 +31,16 @@ public class Code {
         //设置数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDbType(DbType.MYSQL);
-        dsc.setUrl("jdbc:p6spy:mysql:///SchoolShop?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
+        dsc.setUrl("jdbc:mysql:///SchoolShop?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
         dsc.setUsername("root");
         dsc.setPassword("123456");
-        dsc.setDriverName("com.p6spy.engine.spy.P6SpyDriver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         mpg.setDataSource(dsc);
 
         //3、包的配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.tl");
-        pc.setModuleName("consumer");
+        pc.setModuleName("common");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");

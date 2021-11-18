@@ -128,7 +128,17 @@ export default {
 
         },
         addFromGood(){
-            this.$router.push('/goods/fromgood')
+            // this.$router.push('/goods/fromgood')
+
+            // this.$router.push({
+            //     path:'/goods/fromgood',
+            //     query:{ id:0 }
+            // })
+            this.$router.push({
+                path: this.$route.query.redirect || '/goods/fromgood',
+                query: {id: 0}
+            })
+
         }
     }
 }

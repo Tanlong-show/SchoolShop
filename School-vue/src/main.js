@@ -38,7 +38,7 @@ import axios from 'axios'
 
 Vue.prototype.$axios = axios
 
-axios.defaults.baseURL = 'http://localhost:8181';//后端开发环境地址
+axios.defaults.baseURL = 'http://localhost:9527';//后端开发环境地址,进入网关
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';//配置请求头信息。
 //axios.defaults.headers.common['accessToken'] = 'FA4C308D5E8F6409E01344ADDAEB4C71';
 
@@ -94,7 +94,9 @@ axios.interceptors.request.use((config) => {
   // console.log(config)
   if (localStorage.getItem('token') != null) {
     config.headers.curUserid = window.localStorage.getItem('token')
+
   }
+
   return config
 })
 

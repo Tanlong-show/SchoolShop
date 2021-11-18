@@ -19,18 +19,20 @@ module.exports = {
         port: 9528,
         https: false,
         hotOnly: false,
+
         /* 使用代理 */
-        //     proxy: {
-        //         '/api': {
-        //             target: '/localhost:8181',
-        //             secure: false,  // 如果是https接口，需要配置这个参数
-        //             ws: true,//是否代理websockets
-        //             changeOrigin: true,
-        //             pathRewrite: {
-        //                 '^/api': '/localhost:8282'
-        //             }
-        //         }
-        //     }
+            // proxy: {
+            //     '/api': {
+            //         target: '/localhost:8181',
+            //         secure: false,  // 如果是https接口，需要配置这个参数
+            //         ws: true,//是否代理websockets
+            //         changeOrigin: true,
+            //         pathRewrite: {
+            //             '^/8181': '/localhost:9527'
+            //         }
+            //     }
+            // }
         },
+
 
 }

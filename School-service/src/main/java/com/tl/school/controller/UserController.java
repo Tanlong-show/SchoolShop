@@ -2,6 +2,7 @@ package com.tl.school.controller;
 
 
 import com.tl.common.entity.User;
+import com.tl.school.Util.RedisUtil;
 import com.tl.school.service.UserService;
 import io.micrometer.core.instrument.util.JsonUtils;
 import org.apache.catalina.connector.Response;
@@ -38,6 +39,8 @@ import java.util.List;
 class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    RedisUtil redisUtil;
 
     @RequestMapping("/validateUser")
     public String validateUser(HttpSession session, @RequestParam("userid") String userid, @RequestParam("password") String password) {
@@ -61,6 +64,7 @@ class UserController {
         //这里通过登陆账号验证
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
+            redisUtil.set(userid, userList.get(0).getName());
             return userList.get(0);
         } else {
             return null;

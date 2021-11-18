@@ -3,6 +3,8 @@ package com.tl.school.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tl.common.entity.Goods;
+import com.tl.common.entity.Workflow;
+import com.tl.school.Util.WorkflowUtil;
 import com.tl.school.mapper.GoodsMapper;
 import com.tl.school.service.GoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -24,6 +26,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Autowired
     GoodsMapper goodsMapper;
+    @Autowired
+    WorkflowUtil workflowUtil;
 
     @Override
     public List<Goods> findGoodsList() {
@@ -73,6 +77,32 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         Goods goods = goodsMapper.selectById(id);
         goods.setState(goods.getState() == 0 ? 1 : 0);
         goodsMapper.updateById(goods);
+    }
+
+    @Override
+    public Goods getGoodsById(Integer id) {
+        return goodsMapper.selectById(id);
+    }
+
+    @Override
+    public void updateGoods(String token, Goods goods) {
+        if(goods.getId() != null){
+            goodsMapper.updateById(goods);
+        }else{
+            goodsMapper.insert(goods);
+        }
+        Workflow workflow = new Workflow();
+        if(goods.getState() == 2){
+            //创建待审核
+            workflow.setState(2);
+        }else if(goods.getState() == 3){
+            //修改待审核
+            workflow.setState(5);
+        }
+        workflow.setUserId(token);
+        workflow.setGoodsId(goods.getId());
+        workflowUtil.add(workflow);
+
     }
 
 

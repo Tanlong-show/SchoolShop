@@ -63,7 +63,22 @@ public class ConsumerFallback implements FeginClient {
     }
 
     @Override
-    public String lowerShelfById(Integer id) {
+    public String lowerShelfById(@RequestParam("token") String token,Integer id) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getGoodsById(Integer id) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String updateGoods(@RequestParam("token") String token, Goods goods) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getAuditShow(@RequestParam("id")Integer id) {
         return "Feign客户端访问失败!";
     }
 

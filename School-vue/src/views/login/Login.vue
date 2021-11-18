@@ -103,6 +103,7 @@
                 this.$axios
                     .post("/consumer/user/validateUser?userid=" + data.userid + "&password=" + data.password)
                     .then(response => {
+                        console.log(response.data)
                         if (response.data == "登陆成功") {
                             this.$message.success('登陆成功');
                             //如果用户存在并正确则赋予admin令牌，后期考虑jerry身份为管理员或者普通用户，在store/moudles/user.js

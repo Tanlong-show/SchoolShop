@@ -115,6 +115,18 @@ export const asyncRoutes = [
         }
       },
       {
+        path: 'audit',
+        component: () => import('@/views/goods/Audit.vue'),
+        name: 'audit',
+        meta: {
+          title: "商品审计",
+          icon: 'el-icon-tickets',
+          hidden: true,
+          roles: ['admin','jerry'],
+
+        }
+      },
+      {
         path: 'onindex',
         component: () => import('@/views/goods/OnIndex.vue'),
         name: 'onindex',

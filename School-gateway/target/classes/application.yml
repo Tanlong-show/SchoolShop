@@ -4,21 +4,25 @@ server:
 
 spring:
   application:
-    name: gateway-web
+    #服务名配置
+    name: app-gateway
   cloud:
     gateway:
       globalcors:
         cors-configurations:
-          '[/**]':  #匹配所有请求
-            allowedOrigins: "*" #跨域处理 允许所有的域
-            allowedMethods: #支持的方法
-              - GET
-              - POST
-              - PUT
-              - DELETE
+          '[/**]':
+            #是否允许cookie跨域  true允许
+            allowCredentials: true
+            #允许跨域的url * 则允许全部
+            allowedOrigins: '*'
+            # 允许跨域的方法 * 则全部
+            allowedMethods: '*'
+            # 跨域预检时间
+            maxAge: 180
+
       routes:
         - id:  goods
-          uri: http://localhost:9528
+          uri: http://localhost:8181
           predicates:
             - Path=/**
 
