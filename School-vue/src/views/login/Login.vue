@@ -114,21 +114,41 @@
                                     localStorage.setItem("token", response.data.userId)
 
                                 })
-                            this.$store
-                                .dispatch('user/login', {username: "admin"})//admin为令牌
-                                .then(() => {
-                                    this.loading = true
-                                    // 登陆成功后重定向
-                                    this.$router.push({
-                                        path: this.$route.query.redirect || '/index',
-                                        query: {userid: data.userid}
-                                    })
+                            //管理员给令牌1
+                            if(data.root == 1){
+                                this.$store
+                                    .dispatch('user/login', {username: "jerry"})//admin为令牌
+                                    .then(() => {
+                                        this.loading = true
+                                        // 登陆成功后重定向
+                                        this.$router.push({
+                                            path: this.$route.query.redirect || '/index',
+                                            query: {userid: data.userid}
+                                        })
 
-                                })
-                                .catch(err => {
-                                    this.loading = true
-                                    // console.log(err)
-                                })
+                                    })
+                                    .catch(err => {
+                                        this.loading = true
+                                        // console.log(err)
+                                    })
+                            }else{
+                                this.$store
+                                    .dispatch('user/login', {username: "admin"})//admin为令牌
+                                    .then(() => {
+                                        this.loading = true
+                                        // 登陆成功后重定向
+                                        this.$router.push({
+                                            path: this.$route.query.redirect || '/index',
+                                            query: {userid: data.userid}
+                                        })
+
+                                    })
+                                    .catch(err => {
+                                        this.loading = true
+                                        // console.log(err)
+                                    })
+                            }
+
                         } else if (response.data == "密码错误！") {
 
                             this.$message.warning('密码错误');

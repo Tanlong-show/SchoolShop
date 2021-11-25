@@ -27,10 +27,16 @@ public interface GoodsService extends IService<Goods> {
 
     List<Goods>findGoodAdvancedByUserId(String userId, String name, String sortOneName, String sortTwoName);
 
+    List<Goods>findGoodAdvancedByState(String name, String sortOneName, String sortTwoName);
+
     void lowerShelfById(Integer id);
 
     Goods getGoodsById(Integer id);
 
+    //需要进入工作流的更新，创建
     void updateGoods(String token, Goods goods);
+
+    //无需进入工作流
+    public void updateGoodsOk(Goods goods);
 
 }

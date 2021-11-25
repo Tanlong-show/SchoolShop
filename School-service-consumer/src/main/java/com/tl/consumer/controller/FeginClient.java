@@ -55,6 +55,11 @@ public interface FeginClient {
     @RequestMapping(value = "/goods/getGoodsListByUserId")
     String getGoodsListByUserId(@RequestParam("token")String token,@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName);
 
+    @LoadBalanced //负载均衡,查找当前用户商品信息
+    @RequestMapping(value = "/goods/getGoodsListByState")
+    String getGoodsListByState(@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName);
+
+
     @LoadBalanced //负载均衡,批量删除订单
     @RequestMapping(value = "/goods/lowerShelfById")
     String lowerShelfById(@RequestParam("token") String token,@RequestParam("id")Integer id);
@@ -71,6 +76,12 @@ public interface FeginClient {
     @LoadBalanced //负载均衡,更新商品
     @RequestMapping(value = "/goods/getAuditShow")
     String getAuditShow(@RequestParam("id")Integer id);
+
+    @LoadBalanced //负载均衡,更新商品状态
+    @RequestMapping(value = "/goods/updateGoodsBystate")
+    String updateGoodsBystate(@RequestParam("token")String token,@RequestParam("goodsId")Integer goodsId, @RequestParam("state")Integer state
+            ,@RequestParam(name = "content", value = "", required = false) String content);
+
 
 
 }

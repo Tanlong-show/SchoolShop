@@ -2,6 +2,7 @@ package com.tl.consumer.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.org.apache.xpath.internal.objects.XNull;
 import com.tl.common.entity.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class GoodsController {
     private FeginClient feginClient;
 
 
-    //查询所某个用户有产品列表
+    //查询所某个用户有产品列表，也可以进行三级搜索联动
     @RequestMapping("/getGoodsListByUserId")
     @ResponseBody
     public String getGoodsListByUserId(HttpServletRequest request,@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName) {
@@ -25,6 +26,15 @@ public class GoodsController {
         String token = request.getHeader("curUserid");
         return feginClient.getGoodsListByUserId(token, name, sortOneName, sortTwoName);
     }
+
+    //查询所有创建和修改审核的产品列表
+    @RequestMapping("/getGoodsListByState")
+    @ResponseBody
+    public String getGoodsListByState(@RequestParam("name")String name, @RequestParam("sortOneName")String sortOneName, @RequestParam("sortTwoName")String sortTwoName) {
+
+        return feginClient.getGoodsListByState(name, sortOneName, sortTwoName);
+    }
+
 
     //查询所有产品列表
     @RequestMapping("/getGoodsList")
@@ -81,7 +91,18 @@ public class GoodsController {
         feginClient.updateGoods(token, goods);
     }
 
-    //更新、添加产品
+
+    //驳回商品
+    @RequestMapping(value = "/updateGoodsBystate")
+    public void updateGoodsBystate(HttpServletRequest request,@RequestParam("goodsId")Integer goodsId, @RequestParam("state")Integer state
+            ,@RequestParam(name = "content", value = "", required = false) String content){
+        //token这里则是userid
+        String token = request.getHeader("curUserid");
+        System.out.println("state: " + state);
+        feginClient.updateGoodsBystate(token, goodsId, state, content);
+    }
+
+    //审计商品
     @RequestMapping(value = "/getAuditShow")
     public String getAuditShow(@RequestParam("id")Integer id){
 

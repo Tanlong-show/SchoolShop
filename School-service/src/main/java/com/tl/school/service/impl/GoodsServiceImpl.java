@@ -73,6 +73,16 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
                 .like(sortTwoName != null, Goods::getSorttwo, sortTwoName));    }
 
     @Override
+    public List<Goods> findGoodAdvancedByState(String name, String sortOneName, String sortTwoName) {
+        return goodsMapper.selectList(Wrappers.<Goods>lambdaQuery()
+                .ge(Goods::getState, 2)
+                .le(Goods::getState, 3)
+                .like(name != null, Goods::getName, name)
+                .like(sortOneName != null, Goods::getSortone, sortOneName)
+                .like(sortTwoName != null, Goods::getSorttwo, sortTwoName));
+    }
+
+    @Override
     public void lowerShelfById(Integer id) {
         Goods goods = goodsMapper.selectById(id);
         goods.setState(goods.getState() == 0 ? 1 : 0);
@@ -84,6 +94,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         return goodsMapper.selectById(id);
     }
 
+    //修改、创建时候用的
     @Override
     public void updateGoods(String token, Goods goods) {
         if(goods.getId() != null){
@@ -103,6 +114,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         workflow.setGoodsId(goods.getId());
         workflowUtil.add(workflow);
 
+    }
+
+    //直接改状态时使用
+    public void updateGoodsOk(Goods goods){
+        goodsMapper.updateById(goods);
     }
 
 

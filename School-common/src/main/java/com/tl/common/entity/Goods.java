@@ -61,7 +61,7 @@ public class Goods implements Serializable {
     @ApiModelProperty(value = "视频路径")
     private String videoUrl;
 
-    @ApiModelProperty(value = "0-未上架 1-已上架 2-创建审核中 3-修改审核中")
+    @ApiModelProperty(value = "0-未上架 1-已上架 2-创建审核中 3-修改审核中 4-审核未通过")
     private Integer state;
 
     @ApiModelProperty(value = "创建时间")
