@@ -231,8 +231,8 @@ export const asyncRoutes = [
                 component: () => import('@/views/coupon/AddCoupon.vue'),
                 name: 'addCoupon',
                 meta: {
-                    title: "优惠券类型",
-                    icon: 'el-icon-message',
+                    title: "交流大厅",
+                    icon: 'el-icon-chat-line-round',
                     hidden: false,
                     roles: ['admin', 'jerry']
                 }

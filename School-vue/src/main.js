@@ -3,8 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+
+// 聊天室-基于element
+import Chat from 'jwchat';
+Vue.use(Chat)
+
+
+
 
 // 引入进度条样式
 import 'nprogress/nprogress.css'
@@ -55,7 +64,6 @@ Vue.use(scroll)
 
 Vue.use(VueParticles)
 
-Vue.use(ElementUI);
 
 // 全局路由守卫
 import './router/permission'

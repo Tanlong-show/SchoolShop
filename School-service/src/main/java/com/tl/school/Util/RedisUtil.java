@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+//redis工具
+//使用便捷~
 @Component
 public final class RedisUtil {
 
