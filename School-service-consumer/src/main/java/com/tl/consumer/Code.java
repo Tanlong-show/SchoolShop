@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import java.util.Arrays;
 
+//entity生成器
 public class Code {
     public static void main(String[] args) {
         //需要构建一个代码生成器

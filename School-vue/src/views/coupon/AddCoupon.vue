@@ -332,6 +332,7 @@
                     this.talk.splice(value, 1)
                 }
             },
+            //点击左侧头像的回调函数
             bindWinBar(play = {}) {
                 const {type, data = {}} = play
                 console.log(play);
