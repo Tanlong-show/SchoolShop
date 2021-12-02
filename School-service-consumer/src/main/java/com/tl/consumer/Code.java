@@ -41,7 +41,7 @@ public class Code {
         //3、包的配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.tl");
-        pc.setModuleName("common");
+        pc.setModuleName("school");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");

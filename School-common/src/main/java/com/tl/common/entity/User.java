@@ -61,6 +61,10 @@ public class User implements Serializable {
     @ApiModelProperty(value = "认证状态 0-未认证 1-已认证")
     private Integer authentic;
 
+    @ApiModelProperty(value = "个性签名")
+    private String signature;
+
+
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")

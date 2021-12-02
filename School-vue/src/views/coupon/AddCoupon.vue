@@ -25,84 +25,10 @@
 </template>
 
 <script>
-    const img = 'https://www.baidu.com/img/flexible/logo/pc/result.png'
+
 
     //聊天信息框
-    const listData = [
-        {
-            "date": "2020/04/25 21:19:07",
-            "text": {
-                "text": "<i class='el-icon-document-checked' style='font-size:2rem;'/>",
-                "subLink": {
-                    "text": "a.txt",
-                    "prop": {
-                        underline: false
-                    }
-                },
-
-            },
-            "mine": false,
-            "name": "留恋人间不羡仙",
-            "img": "https://img0.baidu.com/it/u=3066115177,3339701526&fm=26&fmt=auto&gp=0.jpg"
-        },
-        {
-            "date": "",
-            "text": {"text": "起床不"},
-            "mine": false,
-            "name": "留恋人间不羡仙",
-            "img": "https://img0.baidu.com/it/u=3066115177,3339701526&fm=26&fmt=auto&gp=0.jpg"
-        },
-        {
-            "text": "2020/04/25 21:19:07",
-            "type": 'tip'
-        },
-        {
-            "date": "2020/04/25 21:19:07",
-            "text": {"text": "<audio data-src='https://www.w3school.com.cn/i/horse.mp3'/>"},
-            "mine": false,
-            "name": "只盼流星不盼雨",
-            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-        },
-        {
-            "date": "2020/04/25 21:19:07",
-            "text": {"text": "<img data-src='" + img + "'/>"},
-            "mine": false,
-            "name": "只盼流星不盼雨",
-            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-        },
-        {
-            "date": "2020/04/16 21:19:07",
-            "text": {"text": "<video data-src='https://www.w3school.com.cn/i/movie.mp4' controls='controls' />"},
-            "mine": true,
-            "name": "JwChat",
-            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-        }, {
-            "date": "2021/03/02 13:14:21",
-            "mine": false,
-            "name": "留恋人间不羡仙",
-            "img": "https://img0.baidu.com/it/u=3066115177,3339701526&fm=26&fmt=auto&gp=0.jpg",
-            "text": {
-                system: {
-                    title: '在接入人工前，智能助手将为您首次应答。',
-                    subtitle: '猜您想问:',
-                    content: [
-                        {
-                            id: `system1`,
-                            text: '组件如何使用'
-                        },
-                        {
-                            id: `system2`,
-                            text: '组件参数在哪里查看'
-                        },
-                        {
-                            id: 'system',
-                            text: '我可不可把组件用在商业'
-                        }
-                    ]
-                }
-            }
-        }
-    ]
+    var listData = []
 
     function getListArr(size) {
         const listSize = listData.length
@@ -111,8 +37,7 @@
         }
         let result = []
         for (let i = 0; i < size; i++) {
-            const item = listData[Math.random() * listSize >> 0]
-            item.id = Math.random().toString(16).substr(-6)
+            var item = listData[i]
             result.push(item)
         }
         return result
@@ -120,8 +45,89 @@
 
     export default {
         components: {},
+
+        //获取当前用户信息
+        created() {
+
+            var userId = localStorage.getItem("token")
+            //获取当前账号用户
+            this.$axios
+                .post("/consumer/user/getUser?userid=" + userId)
+                .then(response => {
+                    this.user = response.data
+
+                    //获取左侧沟通过的用户
+                    this.$axios
+                        .post("/consumer/chatmessage/getMyMessage?myId=" + this.user.id)
+                        .then(response => {
+                            for (let i = 0, j = 1; i < response.data.length; i++, j++) {
+                                console.log(this.friend.name)
+                                this.friend.id = response.data[i].id
+                                this.friend.name = response.data[i].name
+                                this.friend.img = response.data[i].headpicture
+                                this.friend.dept = response.data[i].signature
+
+                                //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
+                                var usernow = JSON.parse(JSON.stringify(this.friend));
+                                this.winBarConfig.list[j] = usernow
+                            }
+                            this.winBarConfig.active = "-1"
+
+                        })
+                })
+
+            //获取右侧所有用户
+            this.$axios
+                .post("/consumer/user/getAllUser")
+                .then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.userone.img = response.data[i].headpicture
+                        this.userone.name = response.data[i].name
+                        this.userone.id = response.data[i].id
+
+                        //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
+                        var usernow = JSON.parse(JSON.stringify(this.userone));
+                        this.rightConfig.list[i] = usernow
+                        // this.rightConfig2.list[i] = usernow
+                    }
+                    this.rightConfig.listTip = "大厅用户"
+                })
+
+
+        },
+
+
         data() {
             return {
+                //当前用户
+                user: {},
+                //好友用户
+                friendList: {},
+                //发送给的用户id,0代表公共聊天,默认进去是0
+                toUserId: "0",
+                //单个信息块
+                message: {
+                    "date": "",
+                    "text": {"text": ""},
+                    "mine": false,
+                    "name": "",
+                    "img": ""
+                },
+                //单个用户模块
+                userone: {
+                    name: '',
+                    img: "",
+                    id: 1,
+                },
+                //单个好友模块
+                friend: {
+                    id: '',
+                    img: '',
+                    name: '',
+                    dept: '',
+                    readNum: 0
+                },
+
                 inputMsg: '',
                 list: [],
                 tool: {
@@ -130,67 +136,32 @@
                     callback: this.toolEvent
                 },
                 rightConfig: {
-                    listTip: '当前在线',
+                    listTip: '用户 Space+BackSpace',
                     // notice: '【公告】这是一款高度自由的聊天组件，基于AVue、Vue、Element-ui开发。点个赞再走吧 ',
-                    list: [
-                        {
-                            name: 'JwChat',
-                            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg",
-                            id: 1,
-                        },
-                        {
-                            id: 2,
-                            name: 'JwChat',
-                            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-                        },
-                        {
-                            id: 3,
-                            name: 'JwChat',
-                            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-                        },
-                        {
-                            id: 4,
-                            name: '留恋人间不羡仙',
-                            "img": "https://img0.baidu.com/it/u=3066115177,3339701526&fm=26&fmt=auto&gp=0.jpg"
-                        },
-                        {
-                            name: '只盼流星不盼雨',
-                            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-                        }
-                    ]
+
+                    list: [],
+                    callback: this.bindWinBar,
+
                 },
                 rightConfig2: {
                     listTip: '当前在线',
                     // notice: '【公告】这是一款高度自由的聊天组件，基于AVue、Vue、Element-ui开发。点个赞再走吧 ',
-                    list: [
-                        {
-                            name: '公共聊天区',
-                            "img": "https://img1.baidu.com/it/u=2109725846,3376113789&fm=26&fmt=auto&gp=0.jpg"
-                        },
-                        {
-                            name: '留恋人间不羡仙',
-                            "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-                        },
-                        {
-                            name: '只盼流星不盼雨',
-                            "img": "https://img1.baidu.com/it/u=2109725846,3376113789&fm=26&fmt=auto&gp=0.jpg"
-                        }
-                    ]
+                    list: []
                 },
                 quickConfig: {
-                    nav: ['快捷回复', '超级回复'],
+                    nav: ['快捷回复'],
                     showAdd: true,
                     maxlength: 200,
                     showHeader: true,
                     showDeleteBtn: true,
                 },
                 talk: [
-                    '快捷回复1',
-                    '快捷回复2',
-                    '快捷回复3',
-                    '快捷回复4',
-                    '快捷回复5',
-                    '快捷回复6',
+                    '我有好货，快私我！',
+                    '衣衣不舍，年末再惠。',
+                    '谁说好货不便宜，不信你来瞧。',
+                    '品牌甩卖，只有更低',
+                    '该出手就出手，让美丽不再冻人',
+                    '大发，大发，花一件钱买到二件啦！',
                 ],
                 tanlong: {
                     width: "1100px",
@@ -203,12 +174,12 @@
                     callback: this.bindCover,
                     historyConfig: {
                         show: true,
-                        tip: '加载更多',
+                        tip: '————————TOP————————',
                         callback: this.bindLoadHistory,
                     },
                     quickList: [
-                        {text: '这里是jwchat，您想了解什么问题。', id: 3},
-                        {text: 'jwchat是最好的聊天组件', id: 4},
+                        {text: '大甩卖！！！限时特惠', id: 3},
+                        {text: '大发，大发，花一件钱买到二件啦！', id: 4},
                         {text: '谁将烟焚散，散了纵横的牵绊；听弦断，断那三千痴缠。', id: 5},
                         {text: '长夏逝去。山野间的初秋悄然涉足。', id: 6},
                         {text: '江南风骨，天水成碧，天教心愿与身违。', id: 7},
@@ -222,43 +193,17 @@
 
                 //左侧好友栏
                 winBarConfig: {
-                    active: 'win01',
+                    active: 'win00',
                     width: '160px',
                     listHeight: '60px',
                     list: [{
                         id: 'win00',
                         img: 'https://ts1.cn.mm.bing.net/th?id=OIP-C.cVzduBzpN28tTaUWRRlA_AAAAA&w=144&h=170&c=8&rs=1&qlt=90&o=6&dpr=1.25&pid=3.1&rm=2',
                         name: '公共聊天区',
-                        dept: '文明交流',
+                        dept: '注意语言，文明公共聊天区',
                         readNum: 1
                     },
-                        {
-                            id: 'win01',
-                            img: 'https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg',
-                            name: '阳光明媚爱万物',
-                            dept: '沙拉黑油',
-                            readNum: 12
-                        },
-                        {
-                            id: 'win02',
-                            img: 'https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg',
-                            name: '只盼流星不盼雨',
-                            dept: '最后说的话',
-                            readNum: 12
-                        },
-                        {
-                            id: 'win03',
-                            img: 'https://img0.baidu.com/it/u=3066115177,3339701526&fm=26&fmt=auto&gp=0.jpg',
-                            name: '留恋人间不羡仙',
-                            dept: '这里可以放万物',
-                            readNum: 0
-                        },
-                        {
-                            id: 'win04',
-                            img: 'https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg',
-                            name: '阳光明媚爱万物',
-                            dept: '官方客服'
-                        }],
+                    ],
                     callback: this.bindWinBar,
 
                 }
@@ -271,18 +216,8 @@
              * @return {*}
              */
             bindLoadHistory() {
-                const history = new Array(3).fill().map((i, j) => {
-                    return {
-                        "date": "2020/05/20 23:19:07",
-                        "text": {"text": j + new Date()},
-                        "mine": false,
-                        "name": "公共聊天区",
-                        "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
-                    }
-                })
-                let list = history.concat(this.list)
-                this.list = list
-                console.log('加载历史', list, history)
+
+                this.$message.warning("已经到顶啦！")
             },
             talkEvent(play) {
                 console.log(play)
@@ -290,16 +225,23 @@
             },
             bindEnter(str) {
                 const msg = this.inputMsg
-                console.log(msg, str);
+                var s = this.getNowFormatTime;
                 if (!msg) return;
+                var tl = this
                 const msgObj = {
-                    "date": "2020/05/20 23:19:07",
+                    "date": tl.getNowTime(),
                     "text": {"text": msg},
                     "mine": true,
-                    "name": "公共聊天区",
-                    "img": "https://img1.baidu.com/it/u=31094377,222380373&fm=26&fmt=auto&gp=0.jpg"
+                    "name": this.user.name,
+                    "img": this.user.headpicture
                 }
                 this.list.push(msgObj)
+
+                //发送到后端，进入redis存储
+                this.$axios
+                    .post("/consumer/chatmessage/sendMessage?toUserId=" + this.toUserId + "&content=" + msg + "&fromUserId=" + this.user.id)
+                    .then(response => {
+                    })
             },
             /**
              * @description:
@@ -315,21 +257,38 @@
             },
             rightClick(type) {
                 console.log('rigth', type)
+                var id = type.value.id
+                if(type.key == "name"){
+                    this.winBarConfig.active = id
+                    if (id === 'win00') {
+                        //如果是点击的公共聊天室，则将toid设为0传到后端识别
+                        this.toUserId = 0;
+                        this.list = getListArr()
+                    } else {
+                        this.toUserId = id;
+                        this.list = getListArr()
+                    }
+
+                }
             },
             bindTalk(play) {
                 console.log('talk', play)
                 const {key, value} = play
                 if (key === 'navIndex')
-                    this.talk = [1, 1, 1, 1, 1, 1, 1, 1].reduce((p) => {
-                        p.push('随机修改颜色 #' + Math.random().toString(16).substr(-6))
-                        return p
-                    }, [])
+                    return p;
+                // this.talk = [1, 1, 1, 1, 1, 1, 1, 1].reduce((p) => {
+                //     // p.push('暂未开放')
+                //     return p
+                // }, [])
                 if (key === 'select') {
                     this.inputMsg = value
                     this.bindEnter()
                 }
                 if (key === 'delIndex') {
                     this.talk.splice(value, 1)
+                }
+                if (key === 'addTalk') {
+                    this.talk.push(value)
                 }
             },
             //点击左侧头像的回调函数
@@ -341,9 +300,29 @@
                     this.config = {...this.config, id, dept, name, img}
                     this.winBarConfig.active = id
                     if (id === 'win00') {
+                        //如果是点击的公共聊天室，则将toid设为0传到后端识别
+                        this.toUserId = 0;
                         this.list = getListArr()
-                    } else
-                        this.list = getListArr(Math.random() * 4 >> 0)
+                    } else {
+                        this.toUserId = id;
+                        this.list = getListArr()
+                    }
+
+
+                    //清空红点
+                    for (let i = 0; i < this.winBarConfig.list.length; i++) {
+
+                        if(this.winBarConfig.list[i].id == this.toUserId){
+                            //无效效果
+                            this.winBarConfig.list[i].readNum = "now"
+                        }else if(this.toUserId == 0 && this.winBarConfig.list[0].readNum != "now"){
+                            console.log(this.winBarConfig.list[0])
+                            this.winBarConfig.list[0].readNum = "now"
+                        }else{
+                            this.winBarConfig.list[i].readNum = "0"
+                        }
+                    }
+
                 }
                 if (type === 'winBtn') {
                     const {target: {id} = {}} = data
@@ -354,11 +333,80 @@
                         return p
                     }, [])
                 }
-            }
-        },
-        mounted() {
-            this.list = getListArr()
+            },
+
+            //获取当前时间并格式化
+            getNowTime() {
+                var date = new Date();
+                var year = date.getFullYear(); //月份从0~11，所以加一
+                var dateArr = [date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
+                for (var i = 0; i < dateArr.length; i++) {
+                    if (dateArr[i] >= 1 && dateArr[i] <= 9) {
+                        dateArr[i] = "0" + dateArr[i];
+                    }
+                }
+                var strDate = year + '-' + dateArr[0] + '-' + dateArr[1] + ' ' + dateArr[2] + ':' + dateArr[3] + ':' + dateArr[4];
+                return strDate
+            },
+            getMyMessage() {
+                //获取==大厅==的对应对话框聊天信息！！！
+                this.$axios
+                    .post("/consumer/chatmessage/getMessage?toUserId=" + this.toUserId + "&fromUserId=" + this.user.id)
+                    .then(response => {
+                        for (let i = 0; i < this.winBarConfig.list.length; i++) {
+                            if(this.winBarConfig.list[i].id == this.toUserId){
+                                this.winBarConfig.list[i].readNum = response.data.length - listData.length
+                            }
+                        }
+                        var num = 0;
+                        for (let i = 0; i < response.data.length; i++, num++) {
+                            //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
+                            var message = JSON.parse(JSON.stringify(this.message));
+                            message.name = response.data[i].userName
+                            message.date = response.data[i].updateTime
+                            message.text.text = response.data[i].content
+                            message.img = response.data[i].userHeadpic
+
+                            //判断信息是对方还是自己
+                            if (response.data[i].fromId == this.user.id) {
+                                message.mine = true
+                            } else {
+                                message.mine = false
+                            }
+
+                            listData[i] = message
+
+                        }
+                        //如果是大厅消息，则没有清空操作
+                        if(this.toUserId == 0){
+
+                        }else{
+                            //好友消息，每次清空原数组重新加载新的对话消息
+                            listData.length = num;
+                        }
+
+                        this.list = getListArr()
+
+                    })
+            },
+
+
         }
+        ,
+        mounted() {
+
+            var my = this
+            this.intervalid1 = setInterval(() => {
+                my.getMyMessage()
+            }, 500);
+
+
+        },
+        //当聊天页面关闭时停止刷新
+        beforeDestroy() {
+            clearInterval(this.intervalid1)
+
+        },
     }
 </script>
 <style scoped>

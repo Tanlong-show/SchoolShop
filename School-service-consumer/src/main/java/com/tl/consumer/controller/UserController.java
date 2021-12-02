@@ -51,5 +51,32 @@ class UserController {
         return result;
     }
 
+    //获取所有用户数据
+    @RequestMapping("/getAllUser")
+    @ResponseBody
+    public String getAllUser() {
+        //调用远程服务
+        String result = feginClient.getAllUser();
+        return result;
+    }
+
+    //获取所有用户数据
+    @RequestMapping("/getAllUserMessage")
+    @ResponseBody
+    public String getAllUserMessage(@RequestParam("userid") String userId) {
+        //调用远程服务
+        String result = feginClient.getAllUserMessage(userId);
+        return result;
+    }
+
+    //获取所有用户数据
+    @RequestMapping("/getMyOrder")
+    @ResponseBody
+    public String getMyOrder(@RequestParam("userid") String userId) {
+        //调用远程服务
+        String result = feginClient.getMyOrder(userId);
+        return result;
+    }
+
 }
 

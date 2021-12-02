@@ -2,7 +2,7 @@
     <div class="Information">
         <div class="Information-title">
             <el-button type="danger" :disabled="this.multipleSelection.length==0 ? true : false" @click="deleteSelect"
-                       size="mini">删除
+                       size="mini">删除/取消
             </el-button>
             <el-button type="success" :disabled="this.multipleSelection.length==1 ? false : true" @click="AddCouponShow = true"
                        size="mini">支付

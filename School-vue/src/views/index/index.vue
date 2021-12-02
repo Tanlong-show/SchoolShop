@@ -10,8 +10,11 @@
                     <div class="index-head-centent-left">
                         <el-avatar style="margin-right: 10px;" :size="56" :src="circleUrl"></el-avatar>
                         <div class="index-head-centent-left-text">
-                            <p>早上好,{{user.name}},祝你新的一天工作愉快</p>
-                            <p>今天小雨转阴天,21~27°,天凉,注意加衣</p>
+                            <p>hello,{{user.name}},祝你新的一天购物愉快</p>
+                            <!--                            <p></p>-->
+                            <p>{{weatherData.city}}: {{weatherData.data[0].wea}}, {{weatherData.data[0].air_tips}} </p>
+                            <span style="font-size: 15px;font-weight: bolder">更新日期：{{weatherData.data[0].date}} {{weatherData.data[0].day}}</span>
+
                         </div>
                     </div>
                 </el-col>
@@ -21,10 +24,10 @@
                             <div class="index-head-centent-right-list-icon">
                                 <daiban style="color: #FD7F07; background: #FBEEE1;"
                                         class="index-head-centent-right-list-icon-is"/>
-                                代办事项
+                                已处理订单数
                             </div>
-                            <div class="index-head-centent-right-list-text">
-                                3 &nbsp;&nbsp;/&nbsp;&nbsp; 26
+                            <div v-if="wait != 0" class="index-head-centent-right-list-text">
+                                {{all-wait}}&nbsp;/&nbsp;{{all}}
                             </div>
                         </div>
                         <div class="index-head-centent-right-list">
@@ -40,10 +43,10 @@
                         <div class="index-head-centent-right-list">
                             <div class="index-head-centent-right-list-icon">
                                 <daiban class="index-head-centent-right-list-icon-is"/>
-                                代办事项
+                                我的订单
                             </div>
                             <div class="index-head-centent-right-list-text">
-                                3 &nbsp;&nbsp;/&nbsp;&nbsp; 26
+                                {{mytotal}}
                             </div>
                         </div>
                     </div>
@@ -73,15 +76,17 @@
                     <div class="grid-content">
                         <div class="index-centent-title">
                             <div class="index-centent-title-left">
-                                <dynamic class="index-centent-title-left-icontwo"/>
-                                动态
+                                <dynamic class="index-centent-title-left-icontwo"></dynamic>
+                                与我相关
                             </div>
                             <div class="index-centent-title-right">
                                 全部动态
                             </div>
                         </div>
                         <div class="index-centent-box">
-                            <DynamicBox/>
+                             <span v-if="flag">
+                                 <DynamicBox :dynamicList="dynamicList"></DynamicBox>
+                             </span>
                         </div>
                     </div>
                 </el-col>
@@ -104,14 +109,16 @@
                         <div class="index-centent-title">
                             <div class="index-centent-title-left">
                                 <group class="index-centent-title-left-iconfour"/>
-                                部门成员 (6)
+                                沟通过的人 ({{number}})
                             </div>
                             <div class="index-centent-title-right">
                                 <!-- 全部动态 -->
                             </div>
                         </div>
                         <div class="index-centent-box">
-                            <Colleague/>
+                            <span v-if="flag2">
+                                <Colleague :friendList="friendList"></Colleague>
+                            </span>
                         </div>
                     </div>
                 </el-col>
@@ -121,37 +128,122 @@
 </template>
 
 <script>
-    import daiban from '@/assets/icon/daiban.svg'
-    import github from '@/assets/icon/github.svg'
-    import sort from '@/assets/icon/sort.svg'
-    import dynamic from '@/assets/icon/dynamic.svg'
-    import operating from '@/assets/icon/operating.svg'
-    import group from '@/assets/icon/group.svg'
-    import Project from '@/components/Index/project' // 项目
-    import DynamicBox from '@/components/Index/dynamicBox' //动态
+    import daiban from '../../assets/icon/daiban.svg'
+    import github from '../../assets/icon/github.svg'
+    import sort from '../../assets/icon/sort.svg'
+    import dynamic from '../../assets/icon/dynamic.svg'
+    import operating from '../../assets/icon/operating.svg'
+    import group from '../../assets/icon/group.svg'
+    import Project from '../../components/Index/project' // 项目
+    import DynamicBox from '../../components/Index/dynamicBox' //动态
     import Fast from '../../components/Index/fast' //快捷操作
     import Colleague from '../../components/Index/colleague'
 
     export default {
+        methods: {},
 
-        created() {
+
+        beforeCreate() {
+            //获取天气数据
+            var _this = this;
+            const url = 'https://www.tianqiapi.com/api?version=v1&appid=18348836&appsecret=BL1qScYV&city=' + '武汉'
+            this.$axios.get(url).then((response) => {
+                console.log(response.data)
+                _this.weatherData = response.data
+            }).catch(() => {
+            })
+
+
             var userId = localStorage.getItem("token")
+            //我的订单
+            this.$axios.get("/consumer/user/getMyOrder?userid=" + userId).then((response) => {
+                this.mytotal = response.data.length
+            }).catch(() => {
+            })
+
             this.$axios
                 .post("/consumer/user/getUser?userid=" + userId)
                 .then(response => {
 
                     this.user = response.data
                     this.circleUrl = response.data.headpicture
+                    //获取左侧沟通过的用户,colleague
+                    this.$axios
+                        .post("/consumer/chatmessage/getMyMessage?myId=" + this.user.id)
+                        .then(response => {
+                            //沟通过人的数量
+                            this.number = response.data.length
+                            for (let i = 0; i < response.data.length; i++) {
+                                this.friend.id = response.data[i].id
+                                this.friend.name = response.data[i].name
+                                this.friend.img = response.data[i].headpicture
+                                this.friend.signature = response.data[i].signature
+                                this.friend.status = response.data[i].status
+
+                                //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
+                                var usernow = JSON.parse(JSON.stringify(this.friend));
+                                this.friendList[i] = usernow
+                            }
+                            this.flag2 = true
+                        })
+                    //dynamicBox
+                    this.$axios
+                        .post("/consumer/user/getAllUserMessage?userid=" + userId)
+                        .then(response => {
+                            for (let i = 0; i < response.data.length; i++) {
+                                this.message.goodId = response.data[i].goodId
+                                this.message.headpic = response.data[i].headpic
+                                this.message.time = response.data[i].time
+                                this.message.type = response.data[i].type
+                                this.message.goodName = response.data[i].goodName
+                                this.message.buyerId = response.data[i].buyerId
+                                this.message.buyerName = response.data[i].buyerName
+
+                                //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
+                                var message = JSON.parse(JSON.stringify(this.message));
+                                this.dynamicList[i] = message
+                            }
+                            this.flag = true
+                            //待办事项
+                            if (this.flag && this.flag2) {
+                                //计算待办事项和总事项数量
+                                var ok = 0
+                                for (let i = 0; i < this.dynamicList.length; i++) {
+                                    if (this.dynamicList[i].type == "下单了") {
+                                        ok++
+                                    }
+                                }
+                                this.wait = ok
+                                this.all = this.dynamicList.length
+                            }
+
+                        })
+                    //js删除固定位置下表元素
+                    // this.friendList.splice(0,1)
 
                 })
 
+
+        },
+        mounted() {
 
         },
 
 
         data() {
             return {
+
+                //我自己的订单数
+                mytotal: '',
+
+                //天气预报
+                weatherData: [],
+
+                ////////////
+                flag: false,
+                flag2: false,
                 user: {
+                    id: "",
                     userId: "",
                     name: "",
                     headpicture: "",
@@ -159,7 +251,39 @@
                 },
                 //后期改成数据库传递过来，用域名的方式展示图片，本地不能加载到图片
                 circleUrl: "",
+                //单个好友模块
+                friend: {
+                    id: '',
+                    img: '',
+                    name: '',
+                    dept: '',
+                    signature: '',
+                    status: '',
+                },
+                //好友列表
+                friendList: [],
+                //沟通过的人数量
+                number: 0,
 
+                //DynamicBox
+                message: {
+                    goodId: '',
+                    buyerId: '',
+                    buyerName: '',
+                    type: '',
+                    goodName: '',
+                    time: '',
+                    headpic: ''
+                },
+
+                dynamicList: [],
+
+                //待办事项
+                wait: '0',//未办事项,就是他人下的订单状态是未支付的
+                all: '0',//总事项
+
+                //我的订单，我自己下的订单
+                ordersNum: '',
             }
 
 
@@ -326,9 +450,9 @@
         width: 12px;
         height: 12px;
         font-size: 12px;
-        color: #F371FA;
+        color: red;
         padding: 5px;
-        background: #FDF4FD;
+        background: pink;
         /* border-radius: 11px; */
         fill: currentColor;
         margin-right: 10px;

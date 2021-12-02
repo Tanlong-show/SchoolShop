@@ -1,5 +1,4 @@
 package com.tl.school.controller;
-import com.sun.org.glassfish.gmbal.ParameterNames;
 import com.tl.common.entity.Goods;
 import com.tl.common.entity.Orders;
 import com.tl.common.entity.User;

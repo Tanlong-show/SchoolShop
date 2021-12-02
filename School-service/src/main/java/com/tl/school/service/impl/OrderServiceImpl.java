@@ -46,4 +46,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
                             .eq(Orders::getBuyerId, userId));
         }
     }
+
+    @Override
+    public List<Orders> selectOrderByUserId(Integer userId) {
+        return orderMapper.selectList(Wrappers.<Orders>lambdaQuery()
+                .eq(Orders::getBuyerId, userId));
+    }
 }

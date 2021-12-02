@@ -1,6 +1,7 @@
 package com.tl.consumer.controller;
 
 import com.tl.common.entity.Goods;
+import com.tl.common.entity.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,6 +19,21 @@ public class ConsumerFallback implements FeginClient {
 
     @Override
     public String getUser(String username) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getAllUser() {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getAllUserMessage(@RequestParam("userid") String userId) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getMyOrder(String userId) {
         return "Feign客户端访问失败!";
     }
 
@@ -89,6 +105,21 @@ public class ConsumerFallback implements FeginClient {
 
     @Override
     public String updateGoodsBystate(String token, Integer goodsId, Integer state, String content) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String sendMessage(Integer toUserId, String content, Integer fromUserId) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getMessage(Integer toUserId, Integer fromUserId) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getMyMessage(Integer myId) {
         return "Feign客户端访问失败!";
     }
 

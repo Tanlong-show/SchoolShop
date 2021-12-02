@@ -1,8 +1,11 @@
 package com.tl.school.controller;
 
 
+import com.tl.common.entity.Orders;
 import com.tl.common.entity.User;
+import com.tl.common.entityView.UserMessage;
 import com.tl.school.Util.RedisUtil;
+import com.tl.school.service.OrderService;
 import com.tl.school.service.UserService;
 import io.micrometer.core.instrument.util.JsonUtils;
 import org.apache.catalina.connector.Response;
@@ -40,6 +43,8 @@ class UserController {
     @Autowired
     private UserService userService;
     @Autowired
+    private OrderService orderService;
+    @Autowired
     RedisUtil redisUtil;
 
     @RequestMapping("/validateUser")
@@ -72,5 +77,22 @@ class UserController {
 
     }
 
+    @RequestMapping("/getAllUser")
+    public List<User> getAllUser() {
+        return userService.findAllUser();
+
+    }
+
+    //获取所有与用户相关订单信息
+    @RequestMapping("/getAllUserMessage")
+    public List<UserMessage> getAllUserMessage(@RequestParam("userid") String userId) {
+        return userService.findAllUserMessage(userId);
+    }
+
+    //获取所有与用户相关订单信息
+    @RequestMapping("/getMyOrder")
+    public List<Orders> getMyOrder(@RequestParam("userid") String userId) {
+        return orderService.selectOrderByUserId(Integer.parseInt(userId));
+    }
 }
 
