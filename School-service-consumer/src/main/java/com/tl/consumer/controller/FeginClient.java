@@ -1,6 +1,7 @@
 package com.tl.consumer.controller;
 
 import com.tl.common.entity.Goods;
+import com.tl.common.entity.Information;
 import com.tl.common.entity.User;
 import com.tl.consumer.Configure.FeignInterceptor;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -109,4 +110,11 @@ public interface FeginClient {
     String getMyMessage(@RequestParam("myId") Integer myId);
 
 
+    @LoadBalanced //公告发布
+    @RequestMapping(value = "/information/publishAnnounce")
+    String publishAnnounce(@RequestParam("token") String token, @RequestBody Information information);
+
+    @LoadBalanced //获取所有公告
+    @RequestMapping(value = "/information/getAllAnnounce")
+    String getAllAnnounce();
 }

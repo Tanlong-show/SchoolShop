@@ -1,6 +1,7 @@
 package com.tl.consumer.controller;
 
 import com.tl.common.entity.Goods;
+import com.tl.common.entity.Information;
 import com.tl.common.entity.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -120,6 +121,16 @@ public class ConsumerFallback implements FeginClient {
 
     @Override
     public String getMyMessage(Integer myId) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String publishAnnounce(String token, Information information) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getAllAnnounce() {
         return "Feign客户端访问失败!";
     }
 

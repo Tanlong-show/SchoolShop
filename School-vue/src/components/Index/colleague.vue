@@ -1,10 +1,10 @@
 <template>
     <div class="colleague">
         <div class="colleague-list" v-for="item in friendList" :key="item.name">
-            <div class="colleague-list-left">
+            <div class="colleague-list-left" @click="contactBuyer(item.id)">
                 <img :src="item.img"/>
             </div>
-            <div class="colleague-list-centent">
+            <div class="colleague-list-centent" @click="contactBuyer(item.id)">
                 <p>{{item.name}}</p>
                 <p style="-webkit-box-orient: vertical;
 					text-overflow: ellipsis;
@@ -27,7 +27,15 @@
         created() {
 
         },
-
+        methods: {
+            //联系买家按钮
+            contactBuyer(id) {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/coupon/AddCoupon',
+                    query: {id: id}
+                })
+            },
+        },
         data() {
             return {}
         }

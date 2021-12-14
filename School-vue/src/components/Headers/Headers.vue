@@ -21,7 +21,7 @@
                     <i class="el-icon-picture-outline-round" @click="theme = true"></i>
                 </el-tooltip>
                 <!-- <el-tooltip class="item" effect="dark" :disabled='dropShow' content="有5条未读消息" placement="bottom" @mouseover="dropShow = !dropShow"> -->
-                <el-badge is-dot class="item">
+                <el-badge v-bind="this.LENGTH" :value=this.LENGTH :max="10" class="item">
                     <i class="el-icon-bell head-news-icon" @mouseover.self="dropShowBtn"
                        @mouseout.self="dropHideBtn"></i>
                 </el-badge>
@@ -29,7 +29,7 @@
                 <!-- 通知栏 -->
                 <div class="header-right-dropdown" @mouseover="dropdownBtn" @mouseout="dropShow = false">
                     <el-collapse-transition>
-                        <Dropdowns v-show="dropShow"/>
+                        <Dropdowns @changeSize="getSize" v-show="dropShow"/>
                     </el-collapse-transition>
                 </div>
             </div>
@@ -87,13 +87,14 @@
 
     export default {
         data: {
+            now: [],
             user: {
                 userId: "",
                 name: "",
                 headpicture: "",
                 root: ""
             },
-            squareUrl:''
+            squareUrl: ''
         },
 
         created() {
@@ -110,7 +111,6 @@
                 })
 
         },
-
 
 
         props: {
@@ -131,6 +131,7 @@
             // let head = 'E:\\picturecore\\'+user.headpicture
 
             return {
+                LENGTH: 0,
                 user: {
                     userId: "",
                     name: "",
@@ -152,6 +153,10 @@
             reduction
         },
         methods: {
+            getSize(val) {
+                this.LENGTH = val
+            },
+
             // 自定义 切换 侧边栏 事件
             targetIcon() {
                 this.$emit('targetIcon', !this.asideShow)
@@ -242,6 +247,9 @@
         mounted() {
             // 浏览器窗口改变事件
             this.isFullscreen = document.body.scrollHeight === window.screen.height
+            //信息实时变动更新小红点
+            // this.LENGTH = this.$refs.nowMessage.LENGTH
+
         }
     }
 </script>

@@ -3,8 +3,10 @@ import com.tl.common.entity.Goods;
 import com.tl.common.entity.Orders;
 import com.tl.common.entity.User;
 import com.tl.common.entityView.OrdersShop;
+import com.tl.school.Configure.RabbitmqConfig;
 import com.tl.school.service.GoodsService;
 import com.tl.school.service.OrderService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,16 +32,24 @@ public class OrderController {
     OrderService orderService;
     @Autowired
     GoodsService goodsService;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
 
     //添加订单
     @RequestMapping("/addOrdering")
     public void addOrdering(@RequestParam("token")String token, @RequestBody List<Goods> goods) {
+        /**
+         * 参数：
+         * 1、交换机名称
+         * 2、routingKey
+         * 3、消息内容
+         */
+//        rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM, "inform.email", "下单");
 
         for (int i = 0; i < goods.size(); i++) {
             Orders order = new Orders();
             order.setState(0);
-            //暂时写死，后面实现springcloud的session一致性再改
             //已改，通过提供方headers提取转发的
             order.setBuyerId(Integer.parseInt(token));
             order.setGoodsId(goods.get(i).getId());

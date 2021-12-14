@@ -103,10 +103,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userMessage.setGoodId(ordersList.get(i).getGoodsId());
             userMessage.setGoodName(goodsMapper.selectById(ordersList.get(i).getGoodsId()).getName());
             userMessage.setTime(ordersList.get(i).getUpdateTime());
+            userMessage.setOrdNumber(ordersList.get(i).getOrdNumber());
             List<User> users = userMapper.selectList(Wrappers.<User>lambdaQuery()
                     .eq(User::getUserId, ordersList.get(i).getBuyerId()));
 
             userMessage.setHeadpic(users.get(0).getHeadpicture());
+            userMessage.setBuyerMainId(users.get(0).getId());
             int state = ordersList.get(i).getState();
             if (state == 0) {
                 userMessage.setType("下单了");

@@ -135,7 +135,7 @@
                         </el-table-column>
                         <el-table-column
                                 prop="createTime"
-                                label="修改信息"
+                                label="通过 √"
                                 width="150">
                             <template slot-scope="scope">　　
                                 <el-button type="success"
@@ -147,7 +147,7 @@
                         </el-table-column>
                         <el-table-column
                                 prop="createTime"
-                                label="修改信息"
+                                label="拒绝 ×"
                                 width="100">
                             <template slot-scope="scope">　　
                                 <el-button type="danger"

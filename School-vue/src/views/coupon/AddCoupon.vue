@@ -46,6 +46,15 @@
     export default {
         components: {},
 
+        beforeMount() {
+            var getId = this.$route.query.id
+            if (getId != undefined) {
+                this.toUserId = getId;
+                this.list = getListArr()
+                this.winBarConfig.active = getId
+            }
+        },
+
         //获取当前用户信息
         created() {
 
@@ -258,7 +267,7 @@
             rightClick(type) {
                 console.log('rigth', type)
                 var id = type.value.id
-                if(type.key == "name"){
+                if (type.key == "name") {
                     this.winBarConfig.active = id
                     if (id === 'win00') {
                         //如果是点击的公共聊天室，则将toid设为0传到后端识别
@@ -312,13 +321,13 @@
                     //清空红点
                     for (let i = 0; i < this.winBarConfig.list.length; i++) {
 
-                        if(this.winBarConfig.list[i].id == this.toUserId){
+                        if (this.winBarConfig.list[i].id == this.toUserId) {
                             //无效效果
                             this.winBarConfig.list[i].readNum = "now"
-                        }else if(this.toUserId == 0 && this.winBarConfig.list[0].readNum != "now"){
+                        } else if (this.toUserId == 0 && this.winBarConfig.list[0].readNum != "now") {
                             console.log(this.winBarConfig.list[0])
                             this.winBarConfig.list[0].readNum = "now"
-                        }else{
+                        } else {
                             this.winBarConfig.list[i].readNum = "0"
                         }
                     }
@@ -354,7 +363,7 @@
                     .post("/consumer/chatmessage/getMessage?toUserId=" + this.toUserId + "&fromUserId=" + this.user.id)
                     .then(response => {
                         for (let i = 0; i < this.winBarConfig.list.length; i++) {
-                            if(this.winBarConfig.list[i].id == this.toUserId){
+                            if (this.winBarConfig.list[i].id == this.toUserId) {
                                 this.winBarConfig.list[i].readNum = response.data.length - listData.length
                             }
                         }
@@ -378,9 +387,9 @@
 
                         }
                         //如果是大厅消息，则没有清空操作
-                        if(this.toUserId == 0){
+                        if (this.toUserId == 0) {
 
-                        }else{
+                        } else {
                             //好友消息，每次清空原数组重新加载新的对话消息
                             listData.length = num;
                         }

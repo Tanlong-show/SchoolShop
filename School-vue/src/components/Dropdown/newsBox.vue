@@ -1,7 +1,7 @@
 <template>
     <div class="drop">
         <div class="drop-left">
-            <img src="" />
+            <img :src="headpicture" />
         </div>
         <div class="drop-right">
             <p>{{text}}</p>
@@ -19,6 +19,10 @@ export default {
             required: true
         },
         time:{
+            type: String,
+            required: true
+        },
+        headpicture:{
             type: String,
             required: true
         },

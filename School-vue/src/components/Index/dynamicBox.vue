@@ -26,7 +26,6 @@
         props: ['dynamicList'],
 
         created() {
-            console.log("AAAAA:" +this.dynamicList.length)
         },
 
         data() {

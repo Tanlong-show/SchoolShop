@@ -126,28 +126,6 @@ export const asyncRoutes = [
                 }
             },
             {
-                path: 'onindex',
-                component: () => import('@/views/goods/OnIndex.vue'),
-                name: 'onindex',
-                meta: {
-                    title: "待上架产品",
-                    icon: 'el-icon-tickets',
-                    hidden: false,
-                    roles: ['admin', 'jerry']
-                }
-            },
-            {
-                path: 'offindex',
-                component: () => import('@/views/goods/OffIndex.vue'),
-                name: 'offindex',
-                meta: {
-                    title: "已下架产品",
-                    icon: 'el-icon-tickets',
-                    hidden: false,
-                    roles: ['admin', 'jerry']
-                }
-            },
-            {
                 path: 'sort',
                 component: () => import('@/views/goods/Sort.vue'),
                 name: 'sort',
@@ -255,7 +233,7 @@ export const asyncRoutes = [
         component: Layout,
         redirect: '/communication/index',
         meta: {
-            title: "通讯",
+            title: "反馈",
             icon: 'el-icon-s-help',
             hidden: false,
         },
@@ -310,45 +288,13 @@ export const asyncRoutes = [
                 component: () => import('@/views/control/Placard.vue'),
                 name: 'placard',
                 meta: {
-                    title: "公告",
+                    title: "实时公告",
                     icon: 'el-icon-message',
                     hidden: false,
                     roles: ['jerry']
                 }
             },
-            {
-                path: 'carousel',
-                component: () => import('@/views/control/Carousel.vue'),
-                name: 'carousel',
-                meta: {
-                    title: "首页轮播图",
-                    icon: 'el-icon-message',
-                    hidden: false,
-                    roles: ['jerry']
-                }
-            },
-            {
-                path: 'ad',
-                component: () => import('@/views/control/Ad.vue'),
-                name: 'ad',
-                meta: {
-                    title: "广告图",
-                    icon: 'el-icon-message',
-                    hidden: false,
-                    roles: ['jerry']
-                }
-            },
-            {
-                path: 'nav',
-                component: () => import('@/views/control/Nav.vue'),
-                name: 'nav',
-                meta: {
-                    title: "首页导航",
-                    icon: 'el-icon-message',
-                    hidden: false,
-                    roles: ['jerry']
-                }
-            },
+
             {
                 path: 'nav',
                 component: () => import('@/views/control/Nav.vue'),
@@ -395,12 +341,23 @@ export const asyncRoutes = [
                 }
             },
             {
-                path: 'home',
+                path: 'Orders',
                 component: () => import('@/views/home/Orders.vue'),
                 name: 'homeOrders',
                 meta: {
-                    title: "我的订单",
-                    icon: 'el-icon-menu',
+                    title: "我的买单",
+                    icon: 'el-icon-coin',
+                    hidden: false,
+                    roles: ['admin', 'jerry']
+                }
+            },
+            {
+                path: 'Orders2',
+                component: () => import('@/views/home/Orders2.vue'),
+                name: 'homeOrders2',
+                meta: {
+                    title: "我的卖单",
+                    icon: 'el-icon-wallet',
                     hidden: false,
                     roles: ['admin', 'jerry']
                 }

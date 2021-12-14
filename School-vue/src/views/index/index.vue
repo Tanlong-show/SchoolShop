@@ -12,19 +12,20 @@
                         <div class="index-head-centent-left-text">
                             <p>hello,{{user.name}},祝你新的一天购物愉快</p>
                             <!--                            <p></p>-->
-                            <p>{{weatherData.city}}: {{weatherData.data[0].wea}}, {{weatherData.data[0].air_tips}} </p>
-                            <span style="font-size: 15px;font-weight: bolder">更新日期：{{weatherData.data[0].date}} {{weatherData.data[0].day}}</span>
+                            <p style="font-size: 6px;" v-if="weatherData.length != 0">{{weatherData.city}}: {{weatherData.data[0].wea}}
+                                <span style="font-size: 8px;font-weight: bolder">更新日期：{{weatherData.data[0].date}} {{weatherData.data[0].day}}</span>
+                            </p>
 
                         </div>
                     </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="10" :lg="12" :xl="12">
                     <div class="index-head-centent-right">
-                        <div class="index-head-centent-right-list">
+                        <div class="index-head-centent-right-list" @click="toAllMessage">
                             <div class="index-head-centent-right-list-icon">
                                 <daiban style="color: #FD7F07; background: #FBEEE1;"
                                         class="index-head-centent-right-list-icon-is"/>
-                                已处理订单数
+                                已处理卖单数
                             </div>
                             <div v-if="wait != 0" class="index-head-centent-right-list-text">
                                 {{all-wait}}&nbsp;/&nbsp;{{all}}
@@ -40,10 +41,10 @@
                                 7
                             </div>
                         </div>
-                        <div class="index-head-centent-right-list">
+                        <div class="index-head-centent-right-list" @click="toAllMessage2">
                             <div class="index-head-centent-right-list-icon">
                                 <daiban class="index-head-centent-right-list-icon-is"/>
-                                我的订单
+                                我的买单
                             </div>
                             <div class="index-head-centent-right-list-text">
                                 {{mytotal}}
@@ -79,7 +80,7 @@
                                 <dynamic class="index-centent-title-left-icontwo"></dynamic>
                                 与我相关
                             </div>
-                            <div class="index-centent-title-right">
+                            <div class="index-centent-title-right" @click="toAllMessage">
                                 全部动态
                             </div>
                         </div>
@@ -140,22 +141,26 @@
     import Colleague from '../../components/Index/colleague'
 
     export default {
-        methods: {},
-
+        methods: {
+            //跳转全部动态 / 我的卖单
+            toAllMessage() {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/home/Orders2',
+                })
+            },
+            //跳转我的买单
+            toAllMessage2() {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/home/Orders',
+                })
+            },
+        },
 
         beforeCreate() {
-            //获取天气数据
-            var _this = this;
-            const url = 'https://www.tianqiapi.com/api?version=v1&appid=18348836&appsecret=BL1qScYV&city=' + '武汉'
-            this.$axios.get(url).then((response) => {
-                console.log(response.data)
-                _this.weatherData = response.data
-            }).catch(() => {
-            })
 
 
             var userId = localStorage.getItem("token")
-            //我的订单
+            //我的买单
             this.$axios.get("/consumer/user/getMyOrder?userid=" + userId).then((response) => {
                 this.mytotal = response.data.length
             }).catch(() => {
@@ -186,23 +191,11 @@
                             }
                             this.flag2 = true
                         })
-                    //dynamicBox
+                    //dynamicBox，我的卖单信息
                     this.$axios
                         .post("/consumer/user/getAllUserMessage?userid=" + userId)
                         .then(response => {
-                            for (let i = 0; i < response.data.length; i++) {
-                                this.message.goodId = response.data[i].goodId
-                                this.message.headpic = response.data[i].headpic
-                                this.message.time = response.data[i].time
-                                this.message.type = response.data[i].type
-                                this.message.goodName = response.data[i].goodName
-                                this.message.buyerId = response.data[i].buyerId
-                                this.message.buyerName = response.data[i].buyerName
-
-                                //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
-                                var message = JSON.parse(JSON.stringify(this.message));
-                                this.dynamicList[i] = message
-                            }
+                            this.dynamicList = response.data
                             this.flag = true
                             //待办事项
                             if (this.flag && this.flag2) {
@@ -226,7 +219,13 @@
 
         },
         mounted() {
-
+            //获取天气数据
+            var _this = this;
+            const url = 'https://www.tianqiapi.com/api?version=v1&appid=18348836&appsecret=BL1qScYV&city=' + '武汉'
+            this.$axios.get(url).then((response) => {
+                _this.weatherData = response.data
+            }).catch(() => {
+            })
         },
 
 
@@ -265,16 +264,6 @@
                 //沟通过的人数量
                 number: 0,
 
-                //DynamicBox
-                message: {
-                    goodId: '',
-                    buyerId: '',
-                    buyerName: '',
-                    type: '',
-                    goodName: '',
-                    time: '',
-                    headpic: ''
-                },
 
                 dynamicList: [],
 
