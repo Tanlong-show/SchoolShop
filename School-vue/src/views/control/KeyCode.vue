@@ -215,13 +215,11 @@
         mounted() {
 
             var userid = localStorage.getItem("token")
-            console.log("root: " + this.userRoot)
 
             this.$axios
                 .post("/consumer/user/getUser?userid=" + userid)
                 .then(response => {
                     this.userRoot = response.data.root
-                    console.log("root: " + this.userRoot)
                 })
 
             this.$axios

@@ -10,11 +10,12 @@
                     <div class="index-head-centent-left">
                         <el-avatar style="margin-right: 10px;" :size="56" :src="circleUrl"></el-avatar>
                         <div class="index-head-centent-left-text">
-                            <p>hello,{{user.name}},祝你新的一天购物愉快</p>
+                            <p style="font-weight: bold;">hello,{{user.name}},祝你新的一天购物愉快!</p>
                             <!--                            <p></p>-->
-                            <p style="font-size: 6px;" v-if="weatherData.length != 0">{{weatherData.city}}: {{weatherData.data[0].wea}}
-                                <span style="font-size: 8px;font-weight: bolder">更新日期：{{weatherData.data[0].date}} {{weatherData.data[0].day}}</span>
-                            </p>
+                            <iframe id="tianqi" scrolling="no" frameborder="0" allowtransparency="true"
+                                    src="http://i.tianqi.com/index.php?c=code&a=getcode&id=34&h=25&w=280">
+                            </iframe>
+
 
                         </div>
                     </div>
@@ -219,13 +220,7 @@
 
         },
         mounted() {
-            //获取天气数据
-            var _this = this;
-            const url = 'https://www.tianqiapi.com/api?version=v1&appid=18348836&appsecret=BL1qScYV&city=' + '武汉'
-            this.$axios.get(url).then((response) => {
-                _this.weatherData = response.data
-            }).catch(() => {
-            })
+
         },
 
 
@@ -235,8 +230,6 @@
                 //我自己的订单数
                 mytotal: '',
 
-                //天气预报
-                weatherData: [],
 
                 ////////////
                 flag: false,
