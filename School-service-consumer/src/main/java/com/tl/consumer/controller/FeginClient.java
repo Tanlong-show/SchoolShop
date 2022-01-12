@@ -1,8 +1,10 @@
 package com.tl.consumer.controller;
 
+import com.tl.common.entity.Flashsale;
 import com.tl.common.entity.Goods;
 import com.tl.common.entity.Information;
 import com.tl.common.entity.User;
+import com.tl.common.entityView.FlashGoods;
 import com.tl.consumer.Configure.FeignInterceptor;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -117,4 +119,14 @@ public interface FeginClient {
     @LoadBalanced //获取所有公告
     @RequestMapping(value = "/information/getAllAnnounce")
     String getAllAnnounce();
+
+    @LoadBalanced //插入秒杀商品
+    @RequestMapping(value = "/flashsale/insertFlashSale")
+    String insertFlashSale(@RequestBody Flashsale flashsale);
+
+
+
+    @LoadBalanced //获取所有公告
+    @RequestMapping(value = "/flashsale/getAllFlashSale")
+    String getAllFlashSale();
 }

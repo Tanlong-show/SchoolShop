@@ -1,8 +1,10 @@
 package com.tl.consumer.controller;
 
+import com.tl.common.entity.Flashsale;
 import com.tl.common.entity.Goods;
 import com.tl.common.entity.Information;
 import com.tl.common.entity.User;
+import com.tl.common.entityView.FlashGoods;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -131,6 +133,16 @@ public class ConsumerFallback implements FeginClient {
 
     @Override
     public String getAllAnnounce() {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String insertFlashSale(Flashsale flashsale) {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
+    public String getAllFlashSale() {
         return "Feign客户端访问失败!";
     }
 

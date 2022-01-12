@@ -28,7 +28,7 @@
 
         },
         methods: {
-            //联系买家按钮
+            //联系买家按钮,用户id主键
             contactBuyer(id) {
                 this.$router.push({
                     path: this.$route.query.redirect || '/coupon/AddCoupon',

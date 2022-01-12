@@ -21,7 +21,7 @@
                     <i class="el-icon-picture-outline-round" @click="theme = true"></i>
                 </el-tooltip>
                 <!-- <el-tooltip class="item" effect="dark" :disabled='dropShow' content="有5条未读消息" placement="bottom" @mouseover="dropShow = !dropShow"> -->
-                <el-badge v-bind="this.LENGTH" :value=this.LENGTH :max="10" class="item">
+                <el-badge :value=this.LENGTH :max="10" class="item">
                     <i class="el-icon-bell head-news-icon" @mouseover.self="dropShowBtn"
                        @mouseout.self="dropHideBtn"></i>
                 </el-badge>

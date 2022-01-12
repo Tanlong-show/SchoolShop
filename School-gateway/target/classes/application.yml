@@ -20,11 +20,25 @@ spring:
             # 跨域预检时间
             maxAge: 180
 
+#  burstCapacity，令牌桶总容量。
+#  replenishRate，令牌桶每秒填充平均速率。
+#  key-resolver，用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
+#  KeyResolver需要实现resolve方法，比如根据Hostname进行限流，则需要用hostAddress去判断。实现完KeyResolver之后，需要将这个类的Bean注册到Ioc容器中
       routes:
         - id:  goods
           uri: http://localhost:8181
           predicates:
             - Path=/**
+          filters:
+          - name: RequestRateLimiter
+            args:
+              # 如果keyResolver返回空key，则拒绝该请求403，默认true表示拒绝，false则表示允许访问
+              deny-empty-key: false
+              key-resolver: '#{@userAddrKeyResolver}'
+              redis-rate-limiter.replenishRate: 100
+              redis-rate-limiter.burstCapacity: 3000
+
+
 
 eureka:
   client:

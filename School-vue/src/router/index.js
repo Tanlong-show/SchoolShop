@@ -153,7 +153,7 @@ export const asyncRoutes = [
                 component: () => import('@/views/marketing/Spike.vue'),
                 name: 'spike',
                 meta: {
-                    title: "秒杀时间段",
+                    title: "秒杀添加",
                     icon: 'el-icon-message',
                     hidden: false,
                     roles: ['admin', 'jerry']
@@ -170,28 +170,7 @@ export const asyncRoutes = [
                     roles: ['admin', 'jerry']
                 }
             },
-            {
-                path: 'area',
-                component: () => import('@/views/marketing/Area.vue'),
-                name: 'area',
-                meta: {
-                    title: "特色专区",
-                    icon: 'el-icon-message',
-                    hidden: false,
-                    roles: ['admin', 'jerry']
-                }
-            },
-            {
-                path: 'choice',
-                component: () => import('@/views/marketing/Choice.vue'),
-                name: 'choice',
-                meta: {
-                    title: "精选分类",
-                    icon: 'el-icon-message',
-                    hidden: false,
-                    roles: ['admin', 'jerry']
-                }
-            },
+
         ]
     },
     {

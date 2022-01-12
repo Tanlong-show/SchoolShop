@@ -67,7 +67,7 @@
                         </el-button>
                         <el-button style="width: 45%;" type="success" icon="el-icon-bell" class="CouponList-Info-li"
                                    size="small"
-                                   @click="">联系卖家
+                                   @click="contactBuyer(v.userId)">联系卖家
                         </el-button>
                     </el-row>
                 </li>
@@ -230,6 +230,16 @@
             }
         },
         methods: {
+
+            //联系买家按钮,这里传的userId，并非user的id主键，后期考虑修改。
+            contactBuyer(id) {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/coupon/AddCoupon',
+                    query: {id: id}
+                })
+            },
+
+
             CouponListSubmit() {
 
                 var tl = this
