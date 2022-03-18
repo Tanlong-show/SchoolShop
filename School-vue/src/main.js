@@ -47,7 +47,7 @@ import axios from 'axios'
 
 Vue.prototype.$axios = axios
 
-axios.defaults.baseURL = 'http://localhost:9527';//后端开发环境地址,进入网关
+axios.defaults.baseURL = 'http://1.14.109.156:9527';//后端开发环境地址,进入网关
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';//配置请求头信息。
 //axios.defaults.headers.common['accessToken'] = 'FA4C308D5E8F6409E01344ADDAEB4C71';
 
