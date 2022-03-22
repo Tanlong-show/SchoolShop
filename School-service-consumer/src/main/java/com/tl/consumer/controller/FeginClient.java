@@ -23,6 +23,10 @@ public interface FeginClient {
     @RequestMapping(value = "/user/validateUser")
     String validateUser(@RequestParam("userid") String userid, @RequestParam("password") String password);
 
+    @LoadBalanced //负载均衡,注册用户
+    @RequestMapping(value = "/user/registerUser")
+    String registerUser(@RequestParam("username") String username, @RequestParam("userid") String userid, @RequestParam("password") String password);
+
     @LoadBalanced //负载均衡，取得用户信息
     @RequestMapping(value = "/user/getUser")
     String getUser(@RequestParam("userid") String userid);

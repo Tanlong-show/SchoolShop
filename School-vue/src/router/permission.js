@@ -15,7 +15,7 @@ NProgress.inc(0.2)
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
 
 
-const whiteList = ['/login'] //排除的路径
+const whiteList = ['/login','/register'] //排除的路径
 
 router.beforeEach(async (to,from,next) => {
     NProgress.start()

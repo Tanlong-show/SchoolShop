@@ -14,6 +14,11 @@ export const constRouter = [
         hidden: true //导航菜单忽略选项
     },
     {
+        path: '/register',
+        component: () => import('@/views/register/register.vue'),
+        hidden: true //导航菜单忽略选项
+    },
+    {
         path: '',
         component: Layout, //应用布局页
         redirect: '/index',

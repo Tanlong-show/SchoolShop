@@ -40,6 +40,10 @@
                         <el-button type="primary" size="medium" :loading="loading" style="width:100%"
                                    @click="submitForm('loginForm')">立即登陆
                         </el-button>
+                        <br>
+                        <el-button type="success" size="medium" :loading="loading" style="width:100%;"
+                                   @click="toRegister()">注册
+                        </el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -65,8 +69,8 @@
             return {
                 loading: false, //登陆状态
                 loginForm: {  // 登陆表单
-                    userid: '18130231',
-                    password: '111111'
+                    userid: '',
+                    password: ''
                 },
                 rules: {  //登陆验证规则
                     userid: [
@@ -94,6 +98,12 @@
                     }
                 });
             },
+            toRegister() {
+                this.$router.push({
+                    path: this.$route.query.redirect || '/register',
+                })
+            },
+
             login() {
 
                 let data = {

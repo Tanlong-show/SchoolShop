@@ -48,7 +48,7 @@ class UserController {
     RedisUtil redisUtil;
 
     @RequestMapping("/validateUser")
-    public String validateUser(HttpSession session, @RequestParam("userid") String userid, @RequestParam("password") String password) {
+    public String validateUser(@RequestParam("userid") String userid, @RequestParam("password") String password) {
         //这里通过登陆账号验证
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
@@ -60,6 +60,23 @@ class UserController {
             }
         } else {
             return "此账户不存在！";
+        }
+
+    }
+
+    @RequestMapping("/registerUser")
+    public String registerUser(@RequestParam("username") String username, @RequestParam("userid") String userid, @RequestParam("password") String password) {
+        //这里通过注册账号验证，看是否已经存在该用户
+        List<User> userList = userService.findByUserId(userid);
+        if (userList.size() != 0) {
+            return "此账户已存在！";
+        } else {
+            User user = new User();
+            user.setName(username);
+            user.setUserId(userid);
+            user.setPassword(password);
+            userService.save(user);
+            return "注册成功";
         }
 
     }

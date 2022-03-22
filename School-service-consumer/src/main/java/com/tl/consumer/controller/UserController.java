@@ -38,7 +38,16 @@ class UserController {
         //调用远程服务
 //		ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://sbc-order/getOrder", String.class);
 //        logger.info("res="+JSON.toJSONString(responseEntity));
-        String result = feginClient.validateUser(userid,password);
+        String result = feginClient.validateUser(userid, password);
+        return result;
+    }
+
+    //用户注册+验证
+    @RequestMapping("/registerUser")
+    @ResponseBody
+    public String registerUser(@RequestParam("username") String username, @RequestParam("userid") String userid, @RequestParam("password") String password) {
+
+        String result = feginClient.registerUser(username, userid, password);
         return result;
     }
 
