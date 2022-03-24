@@ -60,18 +60,18 @@ export const asyncRoutes = [
             hidden: false
         },
         children: [
-            {
-                path: 'analyzeindex',
-                component: () => import('@/views/analyze/Index.vue'),
-                name: 'analyzeindex',
-                meta: {
-                    title: "主控数据",
-                    icon: 'el-icon-tickets',
-                    hidden: false,
-                    //哪些用户能看的数组
-                    roles: ['admin', 'jerry']
-                }
-            },
+            // {
+            //     path: 'analyzeindex',
+            //     component: () => import('@/views/analyze/Index.vue'),
+            //     name: 'analyzeindex',
+            //     meta: {
+            //         title: "主控数据",
+            //         icon: 'el-icon-tickets',
+            //         hidden: false,
+            //         //哪些用户能看的数组
+            //         roles: ['admin', 'jerry']
+            //     }
+            // },
             {
                 path: 'analyzemonitor',
                 component: () => import('@/views/analyze/Monitor.vue'),
@@ -313,17 +313,17 @@ export const asyncRoutes = [
                     roles: ['admin', 'jerry']
                 }
             },
-            {
-                path: 'Informationall',
-                component: () => import('@/views/home/Informationall.vue'),
-                name: 'homeinformationall',
-                meta: {
-                    title: "个人消息",
-                    icon: 'el-icon-message-solid',
-                    hidden: false,
-                    roles: ['admin', 'jerry']
-                }
-            },
+            // {
+            //     path: 'Informationall',
+            //     component: () => import('@/views/home/Informationall.vue'),
+            //     name: 'homeinformationall',
+            //     meta: {
+            //         title: "个人消息",
+            //         icon: 'el-icon-message-solid',
+            //         hidden: false,
+            //         roles: ['admin', 'jerry']
+            //     }
+            // },
             {
                 path: 'Orders',
                 component: () => import('@/views/home/Orders.vue'),

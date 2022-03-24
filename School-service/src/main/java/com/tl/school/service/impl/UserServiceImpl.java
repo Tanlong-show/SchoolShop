@@ -50,6 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
+    @Override
     public List<User> findByUserId(String userId) {
 
         return userMapper.selectList(Wrappers.<User>lambdaQuery()

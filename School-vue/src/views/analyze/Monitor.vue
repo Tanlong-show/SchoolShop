@@ -204,6 +204,9 @@
                 </el-row>
             </el-col>
         </el-row>
+        <li v-for="(v, index) in ipaddress">
+            <p style="font-weight: bold">ipadress：{{v}}</p>
+        </li>
     </div>
 </template>
 
@@ -218,8 +221,19 @@ import LaughSvg from '../../assets/icon/laugh.svg'
 
 import countTo from 'vue-count-to';
 export default {
+
+    mounted() {
+        this.$axios
+            .post("/consumer/user/getIpAddress")
+            .then(response => {
+                this.ipaddress = response.data
+            })
+    },
+
     data(){
         return {
+            ipaddress:[],
+
             value1:'',
             config:{
                 data: [66],

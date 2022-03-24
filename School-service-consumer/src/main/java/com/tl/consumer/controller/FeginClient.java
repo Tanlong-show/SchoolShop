@@ -23,9 +23,17 @@ public interface FeginClient {
     @RequestMapping(value = "/user/validateUser")
     String validateUser(@RequestParam("userid") String userid, @RequestParam("password") String password);
 
+    @LoadBalanced //负载均衡,验证用户
+    @RequestMapping(value = "/user/getIpAddress")
+    String getIpAddress();
+
     @LoadBalanced //负载均衡,注册用户
     @RequestMapping(value = "/user/registerUser")
     String registerUser(@RequestParam("username") String username, @RequestParam("userid") String userid, @RequestParam("password") String password);
+
+    @LoadBalanced //负载均衡，取得用户信息
+    @RequestMapping(value = "/user/modifyUser")
+    String modifyUser(@RequestBody User user);
 
     @LoadBalanced //负载均衡，取得用户信息
     @RequestMapping(value = "/user/getUser")
@@ -127,7 +135,6 @@ public interface FeginClient {
     @LoadBalanced //插入秒杀商品
     @RequestMapping(value = "/flashsale/insertFlashSale")
     String insertFlashSale(@RequestBody Flashsale flashsale);
-
 
 
     @LoadBalanced //获取所有公告

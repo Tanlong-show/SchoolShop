@@ -4,22 +4,23 @@ package com.tl.school.controller;
 import com.tl.common.entity.Orders;
 import com.tl.common.entity.User;
 import com.tl.common.entityView.UserMessage;
+import com.tl.school.Util.IpUtil;
 import com.tl.school.Util.RedisUtil;
 import com.tl.school.service.OrderService;
 import com.tl.school.service.UserService;
 import io.micrometer.core.instrument.util.JsonUtils;
 import org.apache.catalina.connector.Response;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +49,34 @@ class UserController {
     RedisUtil redisUtil;
 
     @RequestMapping("/validateUser")
-    public String validateUser(@RequestParam("userid") String userid, @RequestParam("password") String password) {
+    public String validateUser(HttpServletRequest request, @RequestParam("userid") String userid, @RequestParam("password") String password) throws IOException, JSONException {
+
+        //获取ip
+        String ip = new String();
+        ip = IpUtil.getIpAddr(request);
+        String address = new String();
+        address = IpUtil.getIpInfo(ip);
+
+        //存ip
+        List a = new ArrayList();
+        if(redisUtil.get("ip") != null){
+            a = (List) redisUtil.get("ip");
+        }
+        if (ip != null) {
+            a.add(ip);
+            redisUtil.set("ip", a);
+
+            //存address
+            List b = new ArrayList();
+            if(redisUtil.get("address") != null){
+                b = (List) redisUtil.get("address");
+            }
+            b.add(address);
+            redisUtil.set("address", b);
+        }
+
+
+
         //这里通过登陆账号验证
         List<User> userList = userService.findByUserId(userid);
         if (userList.size() != 0) {
@@ -80,6 +108,25 @@ class UserController {
             return "注册成功";
         }
 
+    }
+
+    @RequestMapping("/modifyUser")
+    public String modifyUser(@RequestBody User user) {
+        userService.updateOrInsertUser(user);
+        return null;
+    }
+
+    @RequestMapping("/getIpAddress")
+    @ResponseBody
+    public List getIpAddress() {
+        List ipAddress = new ArrayList();
+        if(redisUtil.get("ip") != null){
+            ipAddress.add(redisUtil.get("ip"));
+            ipAddress.add(redisUtil.get("address"));
+        }
+
+
+        return ipAddress;
     }
 
     @RequestMapping("/getUser")
