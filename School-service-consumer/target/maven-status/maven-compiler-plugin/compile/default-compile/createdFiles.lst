@@ -1,0 +1,13 @@
+com\tl\consumer\controller\ConsumerFallback.class
+com\tl\consumer\Code.class
+com\tl\consumer\controller\InformationController.class
+com\tl\ConsumerApplication.class
+com\tl\consumer\Configure\FeignInterceptor.class
+com\tl\consumer\controller\UserController.class
+com\tl\consumer\controller\ChatmessageController.class
+com\tl\consumer\controller\FeginClient.class
+com\tl\consumer\Configure\RabbitmqConfig.class
+com\tl\consumer\controller\FlashsaleController.class
+com\tl\consumer\controller\OrderController.class
+com\tl\consumer\Configure\GlobalCorsConfig.class
+com\tl\consumer\controller\GoodsController.class
