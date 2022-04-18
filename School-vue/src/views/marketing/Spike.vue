@@ -46,16 +46,18 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" prop="id">
-                        <el-button type="danger"
-                                   @click="deleteFlashSale(scope.row.id)"
-                                   class="goodsindex-queryInfo-li"
-                                   size="small">删除
-                        </el-button>
-                        <el-button type="warning"
-                                   @click="modifyFlashSale(scope.row.id)"
-                                   class="goodsindex-queryInfo-li"
-                                   size="small">修改
-                        </el-button>
+                        <template slot-scope="scope">
+                            <el-button type="danger"
+                                       @click="deleteFlashSale(scope.row.content)"
+                                       class="goodsindex-queryInfo-li"
+                                       size="small">删除
+                            </el-button>
+                            <el-button type="warning"
+                                       @click=""
+                                       class="goodsindex-queryInfo-li"
+                                       size="small">修改
+                            </el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-col>
@@ -118,6 +120,7 @@
                 .post("/consumer/flashsale/getAllFlashSale")
                 .then(response => {
                     this.list = response.data
+                    console.log(this.list)
                 })
         },
 
@@ -164,6 +167,15 @@
                     .then(response => {
 
                     })
+            },
+
+            deleteFlashSale(content){
+                for (let i = 0; i < this.list.length; i++) {
+                    if(this.list[i].content == content){
+                        this.list.splice(i,1)
+                        return;
+                    }
+                }
             }
         }
     }
