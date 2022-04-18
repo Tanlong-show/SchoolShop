@@ -233,17 +233,17 @@ export const asyncRoutes = [
                     roles: ['admin', 'jerry']
                 }
             },
-            {
-                path: 'wechat',
-                component: () => import('@/views/communication/WeChat.vue'),
-                name: 'communicationwechat',
-                meta: {
-                    title: "客服",
-                    icon: 'el-icon-service',
-                    hidden: false,
-                    roles: ['admin', 'jerry']
-                }
-            },
+            // {
+            //     path: 'wechat',
+            //     component: () => import('@/views/communication/WeChat.vue'),
+            //     name: 'communicationwechat',
+            //     meta: {
+            //         title: "客服",
+            //         icon: 'el-icon-service',
+            //         hidden: false,
+            //         roles: ['admin', 'jerry']
+            //     }
+            // },
         ]
     },
     {

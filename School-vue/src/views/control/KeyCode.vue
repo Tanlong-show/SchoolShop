@@ -107,7 +107,7 @@
                         </el-table-column>
                         <el-table-column
                                 prop="createTime"
-                                label="下架"
+                                label="状态"
                                 width="150">
                             <template slot-scope="scope">　　
                                 <el-button type="danger"

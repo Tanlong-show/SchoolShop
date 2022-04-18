@@ -1,11 +1,13 @@
 package com.tl.school.controller;
 
 
+import com.tl.common.entity.Goods;
 import com.tl.common.entity.Orders;
 import com.tl.common.entity.User;
 import com.tl.common.entityView.UserMessage;
 import com.tl.school.Util.IpUtil;
 import com.tl.school.Util.RedisUtil;
+import com.tl.school.service.GoodsService;
 import com.tl.school.service.OrderService;
 import com.tl.school.service.UserService;
 import io.micrometer.core.instrument.util.JsonUtils;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -46,6 +50,8 @@ class UserController {
     @Autowired
     private OrderService orderService;
     @Autowired
+    private GoodsService goodsService;
+    @Autowired
     RedisUtil redisUtil;
 
     @RequestMapping("/validateUser")
@@ -59,7 +65,7 @@ class UserController {
 
         //存ip
         List a = new ArrayList();
-        if(redisUtil.get("ip") != null){
+        if (redisUtil.get("ip") != null) {
             a = (List) redisUtil.get("ip");
         }
         if (ip != null) {
@@ -68,13 +74,12 @@ class UserController {
 
             //存address
             List b = new ArrayList();
-            if(redisUtil.get("address") != null){
+            if (redisUtil.get("address") != null) {
                 b = (List) redisUtil.get("address");
             }
             b.add(address);
             redisUtil.set("address", b);
         }
-
 
 
         //这里通过登陆账号验证
@@ -120,7 +125,7 @@ class UserController {
     @ResponseBody
     public List getIpAddress() {
         List ipAddress = new ArrayList();
-        if(redisUtil.get("ip") != null){
+        if (redisUtil.get("ip") != null) {
             ipAddress.add(redisUtil.get("ip"));
             ipAddress.add(redisUtil.get("address"));
         }
@@ -158,6 +163,66 @@ class UserController {
     @RequestMapping("/getMyOrder")
     public List<Orders> getMyOrder(@RequestParam("userid") String userId) {
         return orderService.selectOrderByUserId(Integer.parseInt(userId));
+    }
+
+
+    //获取所有视图
+    @RequestMapping("/getAllViews")
+    public HashMap getAllViews() {
+        HashMap hashMap = new HashMap();
+        int peopleCom = 0;
+        //获取访问量
+        List ipAddress = new LinkedList();
+        if (redisUtil.get("ip") != null) {
+            ipAddress = (List) redisUtil.get("address");
+            peopleCom = ipAddress.size();
+        }
+        hashMap.put("peopleCom",peopleCom);
+        //销售额
+        int saleNum = 0;
+        List<Orders> sale = new LinkedList();
+        sale = orderService.selectOrderByUserId(null);
+        saleNum = sale.size();
+        hashMap.put("saleNum",saleNum);
+        //订单数
+        int orderNum = saleNum;
+        hashMap.put("orderNum",orderNum);
+        //管理员数量
+        List<User> users = new LinkedList<>();
+        users = userService.findAllUser();
+        int manager = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getRoot() == 1){
+                manager++;
+            }
+        }
+        hashMap.put("manager",manager);
+        //总用户数
+        hashMap.put("totalPeople",users.size());
+        //转化率,订单数除以用户总数比例
+        int conversion = saleNum * 100 / users.size();
+        hashMap.put("conversion",conversion);
+
+        //分类占比
+        List<Goods> goodsList = new LinkedList<>();
+        goodsList = goodsService.findGoodsList();
+
+        HashMap saleSort = new HashMap();
+        for (int i = 0; i < goodsList.size(); i++) {
+            for (int j = 0; j < sale.size(); j++) {
+                if(sale.get(j).getGoodsId().equals(goodsList.get(i).getId())){
+                    if(!saleSort.containsKey(goodsList.get(i).getSortone())){
+                        saleSort.put(goodsList.get(i).getSortone(), 0.0);
+                    }
+
+                    saleSort.put(goodsList.get(i).getSortone(), (double)saleSort.get(goodsList.get(i).getSortone())+goodsList.get(i).getPrice());
+                }
+            }
+        }
+        //销售分类类别和金额
+        hashMap.put("saleproportion",saleSort);
+
+        return hashMap;
     }
 }
 

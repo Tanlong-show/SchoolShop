@@ -100,6 +100,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         if(goods.getId() != null){
             goodsMapper.updateById(goods);
         }else{
+            goods.setPictureUrl("https://tse3-mm.cn.bing.net/th/id/OIP-C.wqA1x9I9fFEiBvOHA-RQtQHaHa?w=205&h=205&c=7&r=0&o=5&dpr=1.25&pid=1.7");
             goodsMapper.insert(goods);
         }
         Workflow workflow = new Workflow();
@@ -117,6 +118,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     //直接改状态时使用
+    @Override
     public void updateGoodsOk(Goods goods){
         goodsMapper.updateById(goods);
     }
