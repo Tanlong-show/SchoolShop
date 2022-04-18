@@ -26,7 +26,7 @@ spring:
 #  KeyResolver需要实现resolve方法，比如根据Hostname进行限流，则需要用hostAddress去判断。实现完KeyResolver之后，需要将这个类的Bean注册到Ioc容器中
       routes:
         - id:  goods
-          uri: http://1.14.109.156:8181
+          uri: http://127.0.0.1:8181
           predicates:
             - Path=/**
           filters:
@@ -43,4 +43,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://1.14.109.156:8888/eureka/
+      defaultZone: http://127.0.0.1:8888/eureka/
