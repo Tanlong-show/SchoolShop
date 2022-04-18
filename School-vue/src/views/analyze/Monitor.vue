@@ -28,16 +28,16 @@
                         </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
-                        <Monitorcar name='访问量' :number='12' color='#F141AF' icon='ViewsSvg' />
+                        <Monitorcar name='访问量' :number=peopleCom color='#F141AF' icon='ViewsSvg' />
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
-                        <Monitorcar name='销售额' :number='180' color='#F85E1F' icon='SalesSvg' />
+                        <Monitorcar name='销售额' :number=saleNum color='#F85E1F' icon='SalesSvg' />
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
-                        <Monitorcar name='订单数' :number='180' color='#9830FA' icon='OrderSvg' />
+                        <Monitorcar name='订单数' :number=orderNum color='#9830FA' icon='OrderSvg' />
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="6">
-                        <Monitorcar name='新注册' :number='180' color='#0C99FD' icon='RegistrationSvg' />
+                        <Monitorcar name='管理员' :number=manager color='#0C99FD' icon='RegistrationSvg' />
                     </el-col>
                 </el-row>
             </el-col>
@@ -139,74 +139,17 @@
                                 <HerdSvg  class="monitor-header-users-icon-s" />
                             </div>
                             <div class="monitor-header-users-number">
-                                <count-to :startVal='0' :endVal='120' :duration='3000'></count-to>
+                                <count-to :startVal='0' :endVal=totalPeople :duration='3000'></count-to>
                             </div>
                             <div class="monitor-header-users-time">
-                                2020-06-09 22:18:10
+                                {{nowTime}}
                             </div>
                         </div>
                     </el-col>
                 </el-row>
-                <el-row class="monitor-header-two" :gutter="20" style="margin-bottom: 20px;">
-                    <el-col :span="24">
-                        <div class="monitor-cart-name">
-                            <div class="monitor-cart-name-left">
-                                <div class="monitor-cart-name-left-icon">
-                                    <Visitors class="monitor-cart-name-left-icon-s" />
-                                </div>
-                                当前活跃度
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :span="24">
-                        <ve-funnel :data="funnelData" :settings="funnelSettings"></ve-funnel>
-                    </el-col>
-                </el-row>
-                <el-row class="monitor-header-two" :gutter="20" style="margin-bottom: 20px;">
-                    <el-col :span="24">
-                        <div class="monitor-cart-name">
-                            <div class="monitor-cart-name-left">
-                                <div class="monitor-cart-name-left-icon">
-                                    <Visitors class="monitor-cart-name-left-icon-s" />
-                                </div>
-                                客户满意度
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :span="24">
-                       <div class="monitor-header-comment">
-                           <div class="monitor-header-comment-list">
-                                <div class="monitor-header-comment-list-li monitor-header-comment-list-li-number">
-                                    <count-to :startVal='0' :endVal='20120' :duration='3000'></count-to>
-                                </div>
-                                <div class="monitor-header-comment-list-li monitor-header-comment-list-li-tag">
-                                    <LaughSvg class="monitor-header-comment-list-li-icon" />
-                                    <div class="monitor-header-comment-list-li-tag-text">三星及以上评论</div>
-                                </div>
-                                <div class="monitor-header-comment-list-li monitor-header-comment-list-li-percentage">
-                                    95%
-                                </div>
-                           </div>
-                           <div class="monitor-header-comment-list">
-                                <div class="monitor-header-comment-list-li monitor-header-comment-list-li-number">
-                                    <count-to :startVal='0' :endVal='120' :duration='3000'></count-to>
-                                </div>
-                                <div class="monitor-header-comment-list-li monitor-header-comment-list-li-tag">
-                                    <CryingSvg class="monitor-header-comment-list-li-icon" />
-                                    <div class="monitor-header-comment-list-li-tag-text">二星及以下评论</div>
-                                </div>
-                                <div class="monitor-header-comment-list-li monitor-header-comment-list-li-percentage">
-                                    5%
-                                </div>
-                           </div>
-                       </div>
-                    </el-col>
-                </el-row>
+
             </el-col>
         </el-row>
-        <li v-for="(v, index) in ipaddress">
-            <p style="font-weight: bold">ipadress：{{v}}</p>
-        </li>
     </div>
 </template>
 
@@ -228,32 +171,75 @@ export default {
             .then(response => {
                 this.ipaddress = response.data
             })
+        //请求展示数据
+        this.$axios
+            .post("/consumer/user/getAllViews")
+            .then(response => {
+                this.nowTime = this.getNowTime()
+                this.manager = response.data.manager
+                this.orderNum = response.data.orderNum
+                this.peopleCom = response.data.peopleCom
+                this.saleNum = response.data.saleNum
+                this.conversion = response.data.conversion
+                this.saleproportion = response.data.saleproportion
+                this.totalPeople = response.data.totalPeople
+                var z = 0
+                for(var key in this.saleproportion){
+                    this.scaleData.rows[z]['类目'] = key
+                    this.scaleData.rows[z++]['销量'] = this.saleproportion[key]
+                }
+
+            })
+    },
+
+    methods:{
+        //获取当前时间并格式化
+        getNowTime() {
+            var date = new Date();
+            var year = date.getFullYear(); //月份从0~11，所以加一
+            var dateArr = [date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
+            for (var i = 0; i < dateArr.length; i++) {
+                if (dateArr[i] >= 1 && dateArr[i] <= 9) {
+                    dateArr[i] = "0" + dateArr[i];
+                }
+            }
+            var strDate = year + '-' + dateArr[0] + '-' + dateArr[1] + ' ' + dateArr[2] + ':' + dateArr[3] + ':' + dateArr[4];
+            return strDate
+        },
     },
 
     data(){
         return {
             ipaddress:[],
+            nowTime:'',
+            manager: 0,
+            orderNum: 0,
+            peopleCom: 0,
+            saleNum: 0,
+            conversion: '',
+            saleproportion: [],
+            totalPeople: 0,
 
             value1:'',
             config:{
-                data: [66],
+                data: [240,12],
                 shape: 'roundRect'
             },
             chartData:{
                 columns: ['日期', '访问用户', '下单用户', '下单率'],
                 rows: [
-                    { '日期': '1月', '访问用户': 1393, '下单用户': 1093, '下单率': 0.32 },
-                    { '日期': '2月', '访问用户': 3530, '下单用户': 3230, '下单率': 0.26 },
-                    { '日期': '3月', '访问用户': 2923, '下单用户': 2623, '下单率': 0.76 },
-                    { '日期': '4月', '访问用户': 1723, '下单用户': 1423, '下单率': 0.49 },
-                    { '日期': '5月', '访问用户': 3792, '下单用户': 3492, '下单率': 0.323 },
-                    { '日期': '6月', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 },
-                    { '日期': '7月', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 },
-                    { '日期': '8月', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 },
-                    { '日期': '9月', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 },
-                    { '日期': '10月', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 },
-                    { '日期': '11月', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 },
-                    { '日期': '12月', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 }
+                    { '日期': '1月', '访问用户': 12, '下单用户': 10, '下单率': 0.32 },
+                    { '日期': '2月', '访问用户': 11, '下单用户': 5, '下单率': 0.26 },
+                    { '日期': '3月', '访问用户': 8, '下单用户': 4, '下单率': 0.76 },
+                    { '日期': '4月', '访问用户': 5, '下单用户': 2, '下单率': 0.49 },
+                    { '日期': '5月', '访问用户': 1, '下单用户': 0, '下单率': 0.323 },
+                    { '日期': '6月', '访问用户': 12, '下单用户': 1, '下单率': 0.78 },
+                    { '日期': '7月', '访问用户': 15, '下单用户': 10, '下单率': 0.78 },
+                    { '日期': '8月', '访问用户': 5, '下单用户': 1, '下单率': 0.78 },
+                    { '日期': '9月', '访问用户': 6, '下单用户': 2, '下单率': 0.78 },
+                    { '日期': '10月', '访问用户': 12, '下单用户': 5, '下单率': 0.78 },
+                    { '日期': '11月', '访问用户': 5, '下单用户': 2, '下单率': 0.78 },
+                    { '日期': '12月', '访问用户': 8, '下单用户': 2, '下单率': 0.78 }
                 ]
             },
             colors : ['#F141AF','#F85E1F', '#9830FA', '#0C99FD', '#25D9B4','#1AA2FC'],

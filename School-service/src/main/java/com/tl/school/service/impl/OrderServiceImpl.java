@@ -50,6 +50,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
     @Override
     public List<Orders> selectOrderByUserId(Integer userId) {
         return orderMapper.selectList(Wrappers.<Orders>lambdaQuery()
-                .eq(Orders::getBuyerId, userId));
+                .eq(userId != null, Orders::getBuyerId, userId));
     }
 }

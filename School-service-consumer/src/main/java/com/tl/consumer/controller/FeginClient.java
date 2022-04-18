@@ -51,6 +51,10 @@ public interface FeginClient {
     @RequestMapping(value = "/user/getMyOrder")
     String getMyOrder(@RequestParam("userid") String userId);
 
+    @LoadBalanced //获取视图
+    @RequestMapping(value = "/user/getAllViews")
+    String getAllViews();
+
     @LoadBalanced //负载均衡，获取所有商品列表
     @RequestMapping(value = "/goods/getGoodsList")
     String getGoodsList();
@@ -140,4 +144,8 @@ public interface FeginClient {
     @LoadBalanced //获取所有公告
     @RequestMapping(value = "/flashsale/getAllFlashSale")
     String getAllFlashSale();
+
+
+
+
 }

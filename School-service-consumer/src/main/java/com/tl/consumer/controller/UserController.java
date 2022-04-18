@@ -102,5 +102,16 @@ class UserController {
         return result;
     }
 
+    //获取所有视图数据
+    @RequestMapping("/getAllViews")
+    @ResponseBody
+    public String getAllViews() {
+        //调用远程服务
+        String result = feginClient.getAllViews();
+
+        return result;
+    }
+
+
 }
 

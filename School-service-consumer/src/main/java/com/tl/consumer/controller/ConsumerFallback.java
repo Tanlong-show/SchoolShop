@@ -56,6 +56,11 @@ public class ConsumerFallback implements FeginClient {
     }
 
     @Override
+    public String getAllViews() {
+        return "Feign客户端访问失败!";
+    }
+
+    @Override
     public String getGoodsList() {
         return "Feign客户端访问失败!";
     }
