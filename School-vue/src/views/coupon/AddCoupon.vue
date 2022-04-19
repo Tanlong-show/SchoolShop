@@ -70,15 +70,14 @@
                         .post("/consumer/chatmessage/getMyMessage?myId=" + this.user.id)
                         .then(response => {
                             for (let i = 0, j = 1; i < response.data.length; i++, j++) {
-                                console.log(this.friend.name)
                                 this.friend.id = response.data[i].id
                                 this.friend.name = response.data[i].name
                                 this.friend.img = response.data[i].headpicture
                                 this.friend.dept = response.data[i].signature
-
+                                this.friend.readNum = 0
                                 //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
                                 var usernow = JSON.parse(JSON.stringify(this.friend));
-                                this.winBarConfig.list[j] = usernow
+                                this.winBarConfig.list.push(usernow)
                             }
                             this.winBarConfig.active = "-1"
 
@@ -108,6 +107,9 @@
 
         data() {
             return {
+                //之前消息存数
+                messageNowNum:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+
                 //当前用户
                 user: {},
                 //好友用户
@@ -134,7 +136,7 @@
                     img: '',
                     name: '',
                     dept: '',
-                    readNum: 0
+                    readNum: '0'
                 },
 
                 inputMsg: '',
@@ -362,11 +364,42 @@
                 this.$axios
                     .post("/consumer/chatmessage/getMessage?toUserId=" + this.toUserId + "&fromUserId=" + this.user.id)
                     .then(response => {
+
+                        // for (let i = 0; i < this.winBarConfig.list.length; i++) {
+                        //
+                        //     if (this.winBarConfig.list[i].id == this.toUserId) {
+                        //         if(this.winBarConfig.list[i].readNum == 0){
+                        //             this.winBarConfig.list[i].readNum = 0
+                        //         }
+                        //     }
+                        // }
+                        //获取动态信息数量变动
+
                         for (let i = 0; i < this.winBarConfig.list.length; i++) {
-                            if (this.winBarConfig.list[i].id == this.toUserId) {
-                                this.winBarConfig.list[i].readNum = response.data.length - listData.length
+
+                            if(i == 0){
+                                this.$axios
+                                    .post("/consumer/chatmessage/getMessage?toUserId=" + 0 + "&fromUserId=" + this.user.id)
+                                    .then(response => {
+                                        if(response.data.length != this.messageNowNum[i]){
+                                            this.winBarConfig.list[i].readNum = response.data.length - this.messageNowNum[i]
+                                            this.messageNowNum[i] = response.data.length
+                                        }
+                                    })
+                            }else{
+                                this.$axios
+                                    .post("/consumer/chatmessage/getMessage?toUserId=" + this.winBarConfig.list[i].id + "&fromUserId=" + this.user.id)
+                                    .then(response => {
+                                        if(response.data.length != this.messageNowNum[i]){
+                                            this.winBarConfig.list[i].readNum = response.data.length - this.messageNowNum[i]
+                                            this.messageNowNum[i] = response.data.length
+                                        }
+                                    })
                             }
+
                         }
+
+
                         var num = 0;
                         for (let i = 0; i < response.data.length; i++, num++) {
                             //先把defaultObject转换成字符串，然后再转换成对象赋值给newObject,可防止引用
@@ -399,6 +432,11 @@
                     })
             },
 
+            // getChange() {
+            //
+            //
+            // }
+
 
         }
         ,
@@ -407,13 +445,16 @@
             var my = this
             this.intervalid1 = setInterval(() => {
                 my.getMyMessage()
-            }, 500);
+            }, 1500);
 
-
+            // this.intervalid2 = setInterval(() => {
+            //     my.getChange()
+            // }, 2000);
         },
         //当聊天页面关闭时停止刷新
         beforeDestroy() {
             clearInterval(this.intervalid1)
+            // clearInterval(this.intervalid2)
 
         },
     }

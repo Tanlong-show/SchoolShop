@@ -356,5 +356,22 @@ const router = new VueRouter({
     routes: constRouter
 })
 
+// 解决Vue-Router升级导致的Uncaught(in promise) navigation guard问题
+// push
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location, onResolve, onReject) {
+    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location).catch(err => err)
+}
+
+
+
+// replace
+const originalReplace = VueRouter.prototype.replace
+VueRouter.prototype.replace= function replace(location) {
+    return originalReplace.call(this, location).catch(err => err)
+}
+Vue.use(VueRouter)
+
 export default router
 
