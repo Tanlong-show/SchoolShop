@@ -1,8 +1,7 @@
 <template>
     <div class="index">
         <div class="index-foot">
-            wangEditor: 基于javascript和css开发的 Web富文本编辑器， 轻量、简洁、易用、开源免费,具体富文本详细配置请参见: <a href="https://www.kancloud.cn/wangfupeng/wangeditor3/332599">wangEditor</a>
-        </div> 
+        </div>
         <div class="index-box">
             <el-form :model="emailFrom" :rules="emailRules" ref="emailFrom" label-width="100px" class="index-emailFrom">
                 <el-form-item label="收件人" prop="address">
