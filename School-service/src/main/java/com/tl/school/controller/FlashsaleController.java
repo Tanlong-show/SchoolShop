@@ -7,6 +7,7 @@ import com.tl.common.entity.Orders;
 import com.tl.common.entity.User;
 import com.tl.common.entityView.FlashGoods;
 import com.tl.school.Util.RedisUtil;
+import com.tl.school.mapper.FlashsaleMapper;
 import com.tl.school.service.FlashsaleService;
 import com.tl.school.service.GoodsService;
 import com.tl.school.service.OrderService;
@@ -33,6 +34,8 @@ public class FlashsaleController {
     @Autowired
     FlashsaleService flashsaleService;
     @Autowired
+    FlashsaleMapper flashsaleMapper;
+    @Autowired
     RedisUtil redisUtil;
     @Autowired
     GoodsService goodsService;
@@ -43,10 +46,7 @@ public class FlashsaleController {
     @RequestMapping("/insertFlashSale")
     @ResponseBody
     public void insertFlashSale(@RequestBody Flashsale flashsale) {
-        System.out.println(flashsale.toString());
         Goods goods = goodsService.findGoodById(flashsale.getGoodsId());
-        String s = "flashsale"+goods.getId();
-        redisUtil.set(s, goods.getNumber());
         flashsaleService.insertFlashSale(flashsale);
     }
 
@@ -57,13 +57,20 @@ public class FlashsaleController {
         return flashsaleService.getAllFlashSale();
     }
 
-    //获取所有秒杀商品信息
+    //秒抢，这里的id是flashsale的主键id
     @RequestMapping("/flashBuy")
     @ResponseBody
-    public String flashBuy(@RequestParam("userid") String userId, @RequestParam("id") Integer id){
+    public String flashBuy(@RequestParam("userId") String userId, @RequestParam("id") Integer id){
         String s = "flashsale"+id;
-        Goods goods = goodsService.findGoodById(id);
-        Integer num = (Integer)redisUtil.get(s);
+        Flashsale flashsale = flashsaleMapper.selectById(id);
+        Goods goods = goodsService.findGoodById(flashsale.getGoodsId());
+        Integer num = null;
+        if(redisUtil.get(s) != null){
+            num = (Integer)redisUtil.get(s);
+        }else{
+            num = null;
+        }
+
         if(num != null){
             if(num > 0){
                 redisUtil.set(s, num - 1);
@@ -71,7 +78,7 @@ public class FlashsaleController {
                 order.setState(0);
                 //订单生成
                 order.setBuyerId(Integer.parseInt(userId));
-                order.setGoodsId(id);
+                order.setGoodsId(goods.getId());
                 String s2 = "TL"+ (int)(Math.random()*100000000);
                 order.setOrdNumber(s2);
                 order.setSellerId(goods.getUserId());
@@ -97,7 +104,7 @@ public class FlashsaleController {
                 order.setState(0);
                 //订单生成
                 order.setBuyerId(Integer.parseInt(userId));
-                order.setGoodsId(id);
+                order.setGoodsId(goods.getId());
                 String s2 = "TL"+ (int)(Math.random()*100000000);
                 order.setOrdNumber(s2);
                 order.setSellerId(goods.getUserId());

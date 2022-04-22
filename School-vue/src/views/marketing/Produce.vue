@@ -19,7 +19,7 @@
                     <br>
                     <el-row :gutter="5">
                         <el-button style="width: 45%;margin-left: 7px;" icon="el-icon-circle-plus" type="primary" plain
-                                   :disabled="timeList[index] != '已结束'" class="CouponList-Info-li" size="small"
+                                   :disabled="(timeList[index] != '已结束' || v.goods.number == 0)" class="CouponList-Info-li" size="small"
                                    @click="flashbuy(index)">秒买
                         </el-button>
                         <el-button style="width: 45%;" type="success" icon="el-icon-bell" class="CouponList-Info-li"
@@ -91,6 +91,25 @@
                     var t = this.countTime(this.json.list[i].startTime)
                     this.timeList.push(t)
                 }
+            },
+
+            flashbuy(index){
+                var userId = localStorage.getItem("token")
+
+                var good = this.json.list[index]
+                console.log(this.json.list)
+                var id = good.id
+                this.$axios
+                    .post("/consumer/flashsale/flashBuy?id="+id+"&userId="+userId)
+                    .then(response => {
+                        if(response.data == '秒杀成功！'){
+                            this.json.list[index].goods.number -= 1
+                            this.$message.success("秒杀成功！")
+                        }else{
+                            this.json.list[index].goods.number = 0
+                            this.$message.error("已经抢空！秒杀失败")
+                        }
+                    })
             }
         },
         //当聊天页面关闭时停止刷新
@@ -98,21 +117,6 @@
             clearInterval(this.intervalid1)
 
         },
-        flashbuy(index){
-            var userId = localStorage.getItem("token")
-
-            var good = this.json.list[index]
-            var id = good.id
-            this.$axios
-                .post("/consumer/flashsale/flashBuy?id="+id+"&userId="+userId)
-                .then(response => {
-                    if(response = '秒杀成功！'){
-                        this.$message.success("秒杀成功！")
-                    }else{
-                        this.$message.error("已经抢空！秒杀失败")
-                    }
-                })
-        }
     }
 
 
