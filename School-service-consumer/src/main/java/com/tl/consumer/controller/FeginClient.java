@@ -140,6 +140,9 @@ public interface FeginClient {
     @RequestMapping(value = "/flashsale/insertFlashSale")
     String insertFlashSale(@RequestBody Flashsale flashsale);
 
+    @LoadBalanced //秒买
+    @RequestMapping(value = "/flashsale/flashBuy")
+    String flashBuy(@RequestParam("userId") String userId, @RequestParam("id") Integer id);
 
     @LoadBalanced //获取所有公告
     @RequestMapping(value = "/flashsale/getAllFlashSale")

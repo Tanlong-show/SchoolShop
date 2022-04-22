@@ -162,6 +162,11 @@ public class ConsumerFallback implements FeginClient {
     }
 
     @Override
+    public String flashBuy(String userId, Integer id) {
+        return "Feign客户端访问失败";
+    }
+
+    @Override
     public String getAllFlashSale() {
         return "Feign客户端访问失败!";
     }

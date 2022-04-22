@@ -41,5 +41,12 @@ public class FlashsaleController {
         return feginClient.getAllFlashSale();
     }
 
+    //秒买
+    @RequestMapping("/flashBuy")
+    @ResponseBody
+    public String flashBuy(@RequestParam("userId") String userId, @RequestParam("id")Integer id) {
+        return feginClient.flashBuy(userId, id);
+    }
+
 }
 
