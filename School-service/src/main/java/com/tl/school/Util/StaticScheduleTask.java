@@ -1,7 +1,9 @@
 package com.tl.school.Util;
 
 import com.tl.common.entity.Chatmessage;
+import com.tl.common.entity.Orders;
 import com.tl.school.mapper.ChatmessageMapper;
+import com.tl.school.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,11 +18,13 @@ public class StaticScheduleTask {
     @Autowired
     ChatmessageMapper chatmessageMapper;
     @Autowired
+    OrderService orderService;
+    @Autowired
     RedisUtil redisUtil;
 
     //3.添加定时任务
     @Scheduled(cron = "*/15 * * * * ?")
-    //或直接指定时间间隔，例如：5秒
+    //或直接指定时间间隔，例如：15秒
     //@Scheduled(fixedRate=5000)
     private void configureTasks() {
         List<Chatmessage> chatmessageList = new ArrayList<>();
@@ -34,4 +38,22 @@ public class StaticScheduleTask {
             redisUtil.del("Message");
         }
     }
+
+    //3.添加定时任务
+    @Scheduled(cron = "*/5 * * * * ?")
+    //或直接指定时间间隔，例如：5秒
+    //@Scheduled(fixedRate=5000)
+    private void flashgoodsOrderTasks() {
+        List<Orders> flashorderList = (List<Orders>) redisUtil.get("flashorderList");
+
+        if(flashorderList != null){
+            for (int i = 0; i < flashorderList.size(); i++) {
+                orderService.addOrdering(flashorderList.get(i));
+            }
+            //一旦存进数据库则清空redis中信息
+            redisUtil.del("flashorderList");
+        }
+    }
+
+
 }

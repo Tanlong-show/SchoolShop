@@ -20,7 +20,7 @@
                     <el-row :gutter="5">
                         <el-button style="width: 45%;margin-left: 7px;" icon="el-icon-circle-plus" type="primary" plain
                                    :disabled="timeList[index] != '已结束'" class="CouponList-Info-li" size="small"
-                                   @click="addShop(index,v.price)">秒买
+                                   @click="flashbuy(index)">秒买
                         </el-button>
                         <el-button style="width: 45%;" type="success" icon="el-icon-bell" class="CouponList-Info-li"
                                    size="small"
@@ -98,7 +98,21 @@
             clearInterval(this.intervalid1)
 
         },
+        flashbuy(index){
+            var userId = localStorage.getItem("token")
 
+            var good = this.json.list[index]
+            var id = good.id
+            this.$axios
+                .post("/consumer/flashsale/flashBuy?id="+id+"&userId="+userId)
+                .then(response => {
+                    if(response = '秒杀成功！'){
+                        this.$message.success("秒杀成功！")
+                    }else{
+                        this.$message.error("已经抢空！秒杀失败")
+                    }
+                })
+        }
     }
 
 
